@@ -1,0 +1,97 @@
+/* 遮罩 */
+
+#mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, .4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 35px;
+  box-sizing: border-box;
+}
+.maskContain {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 25px;
+  box-sizing: border-box;
+}
+/* 遮罩标题 */
+.maskContain .title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* 输入文本 */
+.maskContain .textarea{
+  border: 1px solid #D7B878;
+  margin: 10px 0;
+}
+.maskContain textarea{
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+/* 取消确认按钮 */
+.maskContain .btn {
+  display: flex;
+  justify-content: center;
+}
+.maskContain .btn span{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 35px;
+  border-radius: 4px;
+}
+.maskContain .btn .cancel{
+  background-color: #f0f0f0;
+  color: #989898;
+  border: none;
+  margin-right: 20px;
+}
+.maskContain .btn .confirm{
+  background-color: #D7B878;
+  color: #fff;
+}
+/* 菜单a */
+.maskContain a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 35px;
+  color: #fff;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+.modifyPsd {
+  background-color: #D7B878;
+}
+
+.maskContain .loginOut {
+  background-color: #EDECEB;
+  color: #989898;
+}
+.maskContain .cancel{
+  background-color: #fff;
+  border: 1px solid #D7B878;
+  color: #D7B878;
+  margin-bottom: 0;
+}
+.maskContain .delete {
+  background-color: #F26F53;
+  margin-bottom: 20px;
+}
+.maskContain .content {
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
