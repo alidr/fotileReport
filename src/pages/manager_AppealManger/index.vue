@@ -371,7 +371,6 @@
 
   .appealList ul li .up {
     width: 92%;
-    overflow: hidden;
     margin: 0 auto;
     border-bottom: 1px solid rgba(177, 177, 177, 1);
     padding-bottom: 8px;
@@ -414,7 +413,7 @@
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
-    width: 40%;
+    width: 44%;
     position: relative;
     
   }

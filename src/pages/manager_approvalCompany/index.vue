@@ -11,10 +11,12 @@
           <span class="filterResult">{{statusSelect}}</span>
           <span class="iconfont icon-xiaosanjiao icon" @click="maskStatus(0)"></span>
         </div>
+        <i></i>
         <div class="filter">
           <span class="filterResult">{{styleSelect}}</span>
           <span class="iconfont icon-xiaosanjiao icon" @click="maskStatus(1)"></span>
         </div>
+        <i></i>
         <div class="filter">
           <span class="filterResult">{{personSelect}}</span>
           <span class="iconfont icon-xiaosanjiao icon" @click="maskStatus(2)"></span>
@@ -44,9 +46,6 @@
             </div>
             <div class="listBottom">
               <i @click="showListMask(true,item.ID)">查看相似公司</i>
-              <!-- 
-              <p>{{item.Content}}</p>
-              <b>小A</b> -->
               <p>{{item.UserName}}于{{item.CreateDate}}新建</p>
             </div>
           </a>
@@ -60,8 +59,10 @@
         <span :class="{active:checkAllBox}" @click="checkAll(list)"></span>
         <p>已选
           <b>{{idList.length}}</b>个家装公司</p>
+          <div class="footerBtn">
         <button type="button" @click="noAllow(true)" class="noAllow">不通过</button>
         <button type="button" @click="distribution">审批通过</button>
+      </div>
 
       </footer>
 
@@ -171,7 +172,6 @@
             })
           })
           .then(res => {
-            console.log(res)
             if (res.data.Status === 1) {
               this.Style = res.data.Data.list
               this.Style.unshift({
@@ -201,7 +201,6 @@
             })
           })
           .then(res => {
-            console.log(res)
             if (res.data.Status === 1) {
               this.Status = res.data.Data.list
               this.Status.unshift({
@@ -222,10 +221,7 @@
           })
       },
        maskStatus(index) {
-         console.log(this.hasMask[index]);
-         
         if (this.hasMask[index] == true) {
-          
           this.hasMask[index] = false
           // console.log(this.hasMask[index]);
           
@@ -263,8 +259,6 @@
       showListMask(bool, id) {
         this.listmask = bool
         if (bool) {
-          console.log(id);
-
           this.getSimilarList(id)
         }
       },
@@ -279,7 +273,6 @@
             })
           })
           .then(res => {
-            console.log(res)
             if (res.data.Status === 1) {
               this.similadList = res.data.Data
               if (this.list == '') {
@@ -316,7 +309,6 @@
               })
             })
             .then(res => {
-              console.log(res)
               if (res.data.Status === 1) {
                 this.getToast("审批成功", 'correct')
                 this.getList()
@@ -359,7 +351,6 @@
             })
           })
           .then(res => {
-            console.log(res)
             if (res.data.Status === 1) {
               this.list = res.data.Data.list
               if (this.list.length==0) {
@@ -371,7 +362,6 @@
                 this.checkBoxs.push(false)
 
               }
-              console.log(this.checkBoxs);
 
             } else if (res.data.Status < 0) {
               this.delCookie("UserId")
@@ -384,13 +374,12 @@
           })
       },
       check(index, id) {
-        console.log(index)
         if (this.checkBoxs[index]) {
           this.checkBoxs[index] = false
           this.checkAllBox = false
           for (let i = 0; i < this.idList.length; i++) {
             if (this.idList[i] == id) {
-              this.idList.splice(i)
+              this.idList.splice(i,1)
             }
           }
 
@@ -408,23 +397,19 @@
 
         this.idList = this.idList.slice()
         this.checkBoxs = this.checkBoxs.slice()
-        console.log(this.idList);
 
 
       },
       checkAll(list) {
 
         if (this.checkAllBox) {
-          console.log(111)
           this.checkAllBox = false
-          console.log(this.checkBoxs);
           this.idList = this.idList.splice()
           for (let i = 0; i < list.length; i++) {
             this.checkBoxs[i] = false
           }
           this.checkBoxs = this.checkBoxs.slice()
         } else {
-          console.log(222);
 
           this.checkAllBox = true
           for (let i = 0; i < list.length; i++) {
@@ -433,9 +418,7 @@
           }
           this.checkBoxs = this.checkBoxs.slice()
           this.idList = this.idList.slice()
-          console.log(this.checkBoxs);
         }
-        console.log(this.idList);
 
       },
       distribution() {
@@ -454,7 +437,6 @@
               })
             })
             .then(res => {
-              console.log(res)
               if (res.data.Status === 1) {
                 this.getToast("审批成功", 'correct')
                 this.getList()
@@ -502,7 +484,10 @@
   .maskContain li:last-child {
     border-bottom: none;
   }
-
+.footerBtn{
+  position: absolute;
+  right: 0;
+}
   .name {
     width: 0;
     flex-grow: 1;
@@ -751,7 +736,6 @@
     bottom: 0;
     left: 0;
     display: flex;
-    justify-content: space-between;
   }
 
   footer span {

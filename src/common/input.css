@@ -2,12 +2,23 @@
  /* <div class="input"><span>家装公司全称<i>*</i></span><input type="text" placeholder="请输入家装公司全称"></div> */
 
 .input{
-  width: 100%;
+  /* padding: 0 10px; */
+  margin: 0 auto;
   height: 42px;
   display: flex;
   align-items: center;
   border-bottom: 1px solid #f0f0f0;
   background-color: #fff;
+  color: #666;
+}
+.inputTitle{
+  display: flex;
+    border-bottom: 1px solid #f0f0f0;
+    justify-content: space-between;
+    padding: 10px 13px;
+}
+.inputTitle span{
+  line-height: 30px;
 }
 .input span{
   color: #666;
@@ -22,6 +33,7 @@
   text-align: right;
   margin-left: 10px;
   margin-right: 15px;
+  background: none;
 }
 .arrow{
   display: flex;

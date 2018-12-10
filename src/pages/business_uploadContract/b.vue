@@ -132,7 +132,9 @@ export default {
 }
 
 #button{
+  display: block;
   width: calc(100% - 60px);
+  text-align: center;
 }
 
 #button.cancel{

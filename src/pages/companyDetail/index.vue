@@ -10,7 +10,11 @@
               <span>{{data.StatusName}}</span>
               <span>{{data.Name}}</span>
             </p>
-            <p class="person">业务员 {{data.UName}}</p>
+            <div class="basicText">
+              <p class="person">业务员<span>{{data.UName}}</span></p>
+              <p class="spanText">归属类型<span>{{data.TypeName}}</span></p>
+            </div>
+
           </div>
           <div class="topIcon">
             <span @click="showMask(true)" v-if="edit">
@@ -88,33 +92,24 @@
           <a href="javascript:;" class="applyBtn active" v-if="!applyshu" @click="getImg(data.AuthBookImage)">查看授权书</a>
           <span class="applyStatus active" v-if="reApplyshu" @click="uploadContract(1)">重新上传</span>
         </p>
-
-        <!-- <p class="uploadContract">
-        <span class="round"><i>2</i></span>
-        <span class="statusDetail">授权书照片</span>
-        <a href="javascript:;" class="applyBtn" v-if="applyshu">上传授权书</a>
-        <a href="javascript:;" class="applyBtn active" v-if="!applyshu">查看授权书</a> -->
-        <!-- <span class="applyStatus">审核通过</span> -->
-        <!-- </p> -->
         <span class="line"></span>
-
         <p class="applyAuthorized">
           <span class="round" :class="{'active':btn3Active}"><i :class="{'active':btn3Active}">3</i></span>
           <span class="statusDetail" :class="{'active':btn3Active}">签约成功，上传合同</span>
           <a href="javascript:;" class="applyBtn" :class="{'active':btn3Active}" v-if="applyhe" @click="uploadContract(2)">上传签约合同</a>
-
-
-          <a href="javascript:;" class="applyBtn active" v-if="!applyhe" @click="getImgH(data.ContractImage)">查看合同</a>
-
+          <a href="javascript:;" class="applyBtn" :class="{'active':btn3Active}" v-if="applquyu">上传签约合同</a>
+          <a href="javascript:;" class="applyBtn active" v-if="!applyhe&&!applquyu" @click="getImgH(data.ContractImage)">查看合同</a>
         </p>
-        <!-- <p class="applyAuthorized">
-        <span class="round"><i>3</i></span>
-        <span class="statusDetail">上传合同</span>
-        <router-link to="/uploadContract" class="applyBtn" v-if="applyhe">上传签约合同</router-link>
-         <a href="javascript:;" class="applyBtn active" v-if="!applyhe">查看授权书</a> -->
-
-        <!-- <span class="applyStatus">审核通过</span> -->
-        <!-- </p> -->
+        <span class="line"></span>
+        <p class="uploadContract">
+          <span class="round" :class="{'active':btn4Active}"><i :class="{'active':btn4Active}">4</i></span>
+          <span class="statusDetail" :class="{'active':btn4Active}">上传签约凭证</span>
+          <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" @click="uploadContract(4)"
+            v-if='applyqy'>上传费用凭证</a>
+            <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" v-if='freeBtn'>上传费用凭证</a>
+          <a href="javascript:;" class="applyBtn active" v-if="!applyqy&&!freeBtn" @click="getImgH(data.ExpenseVoucherList)">查看费用凭证</a>
+          <span class="applyStatus active" v-if="reApplyqy" @click="uploadContract(4)">编辑上传</span>
+        </p>
       </div>
       <!-- 跟单时间线 -->
       <div class="followTime">
@@ -150,17 +145,17 @@
       <!-- 竞品分析 -->
       <div class="competition">
         <div class="followDays">
-          <p>竞品分析 <span class="month">{{complete.Month}}月</span></p>
+          <p>销售分析 <span class="month">{{complete.Month}}月</span></p>
           <a href="javascript:;" @click="allMonth">所有月份>></a>
         </div>
         <div class="competitionInfo" v-if="infoNull">
           <p>
-            <span>竞品销量</span>
-            <span>{{complete.SaleCount}}</span>
+            <span>公司销量</span>
+            <span>{{complete.CompanySaleCount}}</span>
           </p>
           <p>
-            <span>竞品开工数</span>
-            <span>{{complete.WorkCount}}</span>
+            <span>竞品销量</span>
+            <span>{{complete.SaleCount}}</span>
           </p>
           <p>
             <span>竞品出样量</span>
@@ -168,8 +163,9 @@
           </p>
         </div>
         <div class="competitionNum" v-if="infoNull">
-          <p>门店数量&emsp;{{complete.ShopCount}}</p>
-          <p>设计师数&emsp;{{complete.StylistCount}}</p>
+          <p>门店数&emsp;<span>{{complete.ShopCount}}</span></p>
+          <p>开工数&emsp;<span>{{complete.WorkCount}}</span></p>
+          <p>设计师数&emsp;<span>{{complete.StylistCount}}</span></p>
         </div>
         <div class="infoNull" v-if="!infoNull">
           信息为空
@@ -263,15 +259,10 @@
         </div>
       </div>
     </div>
-    <div class="swiperMask" v-if='ImgMaskH' >
+    <div class="swiperMask" v-if='ImgMaskH'>
       <i @click.stop="imgMask" class="closeSwiper">
         <img src="./close.png" alt="">
       </i>
-      <!-- <swiper :options="swiperOption" ref="mySwiper">
-        <swiper-slide class="swiper-slide games" v-for='t in imgArr' :key='index'>
-          <img :src="getImgHost()+t" alt="" v-gallery="'groupName'">
-        </swiper-slide>
-      </swiper> -->
       <swiper :options="swiperOption" ref="mySwiper">
         <div class="swiper-slide games" v-for='(t,index) in imgArr' :key='index'>
           <img :src="getImgHost()+t" alt="" v-gallery="'groupName'">
@@ -294,15 +285,17 @@
   export default {
     data() {
       return {
+        freeBtn:false,
+        applyqy: true, //签约凭证
         swiperOption: {
           autoplay: 4000,
-            resistanceRatio: 0,
-            initialSlide: 0,
-            autoplayDisableOnInteraction: false,
-            preventLinksPropagation: true,
-            pagination: ".swiper-pagination",
-            observer: true,//修改swiper自己或子元素时，自动初始化swiper
-            observeParents: true,//修改swiper的父元素时，自动初始化swiper
+          resistanceRatio: 0,
+          initialSlide: 0,
+          autoplayDisableOnInteraction: false,
+          preventLinksPropagation: true,
+          pagination: ".swiper-pagination",
+          observer: true, //修改swiper自己或子元素时，自动初始化swiper
+          observeParents: true, //修改swiper的父元素时，自动初始化swiper
         },
         noHasImg: false,
         shopID: '',
@@ -342,10 +335,12 @@
         applyshou: true,
         applyshu: true,
         reApplyshu: false,
+        reApplyqy: false, //重新上传费用凭证
         applyhe: true,
         btnActive: false,
         btn2Active: false,
         btn3Active: false,
+        btn4Active: false,
 
         timeList: [],
         timeLineWord: '展开',
@@ -357,6 +352,7 @@
           SampleCount: '',
           ShopCount: '',
           StylistCount: '',
+          CompanySaleCount: '', //公司销量
         },
         infoNull: false,
         //show业务员独有的部分
@@ -374,11 +370,15 @@
         ImgMaskH: false,
         imgArr: [],
         imgStr: '',
+        typeGui: '',
+        applquyu: false,
+        ExpenseVoucherList:'',//费用凭证
 
       }
 
     },
     created() {
+      
       localStorage.removeItem("companyId")
       this.stylePlay = this.$route.query.stylePlay || ""
       this.ID = this.$route.query.id
@@ -507,6 +507,7 @@
           this.show = false
         }
         this.getInfo(this.ID)
+        
       },
       //判断直营店模块
       // showShopModel(){
@@ -556,8 +557,6 @@
             })
           })
           .then(res => {
-            console.log(res)
-
             if (res.data.Status === 1) {
               this.data = res.data.Data
               //公司状态
@@ -576,7 +575,6 @@
                   this.afterUpload = false
                   this.getShop(this.ID)
                 } else {
-                  // console.log(this.show);
                   this.noHasImg = false
                   // if (this.show) {
                   //   this.busniessShopShow = false
@@ -603,6 +601,7 @@
               //    this.lookShop = true
               // }
               //业务员
+
               if ((this.AccessId == 5 && this.stylePlay == "") || this.AccessId == -1) {
                 this.edit = true
 
@@ -617,15 +616,41 @@
                 // applyhe 上传合同按钮
                 //！applyhe查看合同按钮
                 //btn3Active亮不亮
-                if ((this.data.ContractImage == '' || this.data.ContractImage == null) && this.data.Status == 2) {
+                if (this.data.AuthBookImage && this.data.Status == 2) {
                   this.applyhe = true
                   this.btn3Active = true
-                } else if (this.data.ContractImage && (this.data.Status == 2 || this.data.Status == 3)) {
-                  console.log(this.data.ContractImage, 888)
-                  this.applyhe = false
-                  this.btn3Active = true
+                  if (this.data.ContractImage == '' || this.data.ContractImage == null) {
+                    this.applyhe = true
+                    this.btn3Active = true
+                  } else {
+                    this.applyhe = false
+                    this.btn3Active = true
+                  }
                 }
 
+                // else if (this.data.AuthBookImage && this.data.Status == 2) {
+                //   this.applyhe = true
+                //   this.btn3Active = true
+                //  } else if (this.data.ContractImage && (this.data.Status == 2 || this.data.Status == 3)) {
+                //   this.applyhe = false
+                //   this.applquyu = false
+                //   this.btn3Active = true
+                // }
+                if (this.data.Status == 3) {
+                  this.btn3Active=false
+                  this.btn4Active = true
+                  this.applyqy=false
+                  this.applyhe=false
+                  console.log(this.data.Status)
+                  if (this.data.ExpenseVoucherList == '' || this.data.ExpenseVoucherList == null) {
+                    this.applyqy = true
+                    this.btn4Active = true
+                  } else {
+                    this.reApplyqy = true
+                    this.applyqy = false
+
+                  }
+                }
                 // if (this.data.ContractImage&&(this.data.Status==2||this.data.Status==3)) {
 
                 //   this.applyhe = false
@@ -647,31 +672,49 @@
                 } else {
                   this.imgStr = this.data.ContractImage
                   this.imgArr = this.imgStr.split(',')
-                  //  console.log(imgStr.split(','),22)
                   this.applyhe = false
+                  this.applquyu = false
                   this.btn3Active = false
                 }
+                if (this.data.ExpenseVoucherList == '' || this.data.ExpenseVoucherList == null) {
+                    this.applyqy = false
+                    this.btn4Active = false
+                    this.freeBtn=true
+                  } else {
+                    this.reApplyqy = false
+                    this.applyqy = false
+
+                  }
               }
               //区域经理
               if (this.AccessId == 3) {
+                this.applyhe = false
+                this.applquyu = true
                 if (this.data.AuthBookImage) {
-                  //  console.log("hahhaha",this.data.AuthBookImage);
-                  //  console.log("hahhaha",this.applyshu);
-
                   this.applyshu = false
                   this.reApplyshu = true
                   this.btn2Active = true
+                  this.applquyu = false
+                  this.applyhe = false
+                  if(this.data.ContractImage){
+                    this.applquyu = false
+                    this.applyhe = false
+
+                  }else{
+                    this.applquyu = true
+                    this.applyhe = false
+                  }
+                  
                 } else {
-
-
                   if (this.data.Status == 2 || this.data.Status == 3) {
                     this.applyshu = true
                     this.btn2Active = true
+                    this.applquyu = true
+                    this.applyhe = false
                   } else {
                     this.applyshu = true
                     this.btn2Active = false
                   }
-
                 }
               } else {
                 this.reApplyshu = false
@@ -682,8 +725,6 @@
                   this.btn2Active = false
                 }
               }
-
-
             } else if (res.data.Status < 0) {
               this.getToast(res.data.Message, 'warn')
               setTimeout(() => {
@@ -709,10 +750,8 @@
             })
           })
           .then(res => {
-            // console.log(res)
             if (res.data.Status === 1) {
               this.timeList = res.data.Data.list
-              // console.log(this.timeList)
             } else if (res.data.Status < 0) {
               this.delCookie("UserId")
               this.delCookie("token")
@@ -797,7 +836,7 @@
       //       }
       //   })
       // },
-      
+
       editCompete() {
         this.$router.push({
           path: '/editCompete',
@@ -815,7 +854,6 @@
       },
       getImgH(src) {
         this.imgArr = src.split(',')
-        console.log(this.imgArr)
         this.ImgMaskH = true
 
       },
@@ -884,7 +922,6 @@
       //num==1 申请
       //num==2 查看
       applyAuthorized(num) {
-
         if (this.btnActive || !this.applyshou) {
           this.$router.push({
             path: '/applyAuthorized',
@@ -899,8 +936,7 @@
       //1授权书
       //2合同
       uploadContract(num) {
-        if (this.btn3Active || this.btn2Active) {
-
+        if (this.btn3Active || this.btn2Active || this.btn4Active) {
           this.$router.push({
             path: '/uploadContract',
             query: {
@@ -910,9 +946,9 @@
           })
         }
       },
+      
       //放弃跟进
       giveUpFollow() {
-
         if (!this.giveUpReason) {
           this.getToast("请输入放弃跟进的原因", 'warn')
           return
@@ -1027,9 +1063,6 @@
     width: 100%;
   }
 
-  /* .maskContain{
-  padding: 15px 0;
-} */
   .btn {
     margin-top: 15px;
   }
@@ -1080,8 +1113,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80px;
+    padding: 16px 0;
     border-bottom: 1px solid #f0f0f0;
+    position: relative;
   }
 
   .basic {
@@ -1094,8 +1128,9 @@
   }
 
   .status {
+    width: 80%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     margin-bottom: 15px;
   }
 
@@ -1119,8 +1154,14 @@
   }
 
   .person {
-    color: #999999;
+    color: black;
     font-size: 12px;
+    margin-right: 16px;
+  }
+
+  .person span {
+    color: #999999;
+    margin-left: 10px;
   }
 
   .topIcon {
@@ -1128,6 +1169,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    top: 12px;
+    right: -10px;
   }
 
   .topIcon span {
@@ -1326,7 +1370,9 @@
   .applyStatus.active {
     color: #666;
   }
-
+  .applyStatus.active{
+    color: #9c9c9c;
+  }
   /* 跟单时间线 */
 
   .followTimeTop,
@@ -1436,12 +1482,13 @@
     border: none;
   }
 
-  .competitionInfo p span:first-child {
+  .competitionInfo p span:nth-child(1) {
     margin-bottom: 10px;
+    color: #808080;
   }
 
-  .competitionNum {
-    padding: 10px 0;
+  .competitionInfo p span:nth-child(2) {
+    color: #000;
   }
 
   .competitionNum p {
@@ -1450,9 +1497,15 @@
     justify-content: center;
     align-items: center;
     flex-grow: 1;
+    color: #808080;
   }
 
-  .competitionNum p:first-child {
+  .competitionNum p span {
+    color: #000;
+  }
+
+  .competitionNum p:nth-child(1),
+  .competitionNum p:nth-child(2) {
     border-right: 1px solid #f0f0f0;
   }
 
@@ -1563,13 +1616,26 @@
     width: 74%;
     margin: 0 auto;
   }
-  .closeSwiper{
+
+  .closeSwiper {
     position: absolute;
     right: 10px;
     top: 10px;
     width: 40px;
     height: 4px;
     z-index: 99;
+  }
+
+  .basicText {
+    display: flex;
+    font-size: 12px;
+    color: black;
+  }
+
+  .spanText span {
+    font-size: 12px;
+    margin-left: 10px;
+    color: #999999;
   }
 
 </style>

@@ -7,6 +7,11 @@
        <input type="text" placeholder="请选择" readonly v-model="JobInfo" :job="jobId">
        <i class="arrow"></i>
      </div>
+     <div class="input" @click="showAscType">
+      <span>归属类型<i>*</i></span>
+      <input type="text" placeholder="请选择" readonly v-model="ascription" :asc="ascId">
+      <i class="arrow"></i>
+    </div>
      <div class="input">
        <span>家装公司全称<i>*</i></span>
        <input type="text" placeholder="请输入家装公司全称" v-model="companyName">
@@ -22,14 +27,28 @@
 <script>
 import qs from 'qs'
 import axios from "axios";
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex';
+const dataTpye=[
+        {
+          text:'家装',
+          value:1,
+
+        },
+        {
+          text:'门店',
+          value:2,
+
+        }
+      ]
 export default {
   name: 'addCompany',
   data(){
     return {
       JobInfo:'',
       jobId:0,
-      companyName:''
+      companyName:'',
+      ascription:'',
+      ascId:0,
     }
   },
   computed: {
@@ -40,6 +59,7 @@ export default {
   },
   mounted () {
     this.getPickerConfig()
+    this.ascType()
     localStorage.removeItem("companyStyle")
     localStorage.removeItem("companyName")
     this.setBusninessCompanyInfo([])
@@ -96,10 +116,33 @@ export default {
     showPicker () {
       this.picker.show()
     },
+    // 归属类型
+    showAscType () {
+      this.pickerType.show()
+    },
+    ascType(){
+      this.pickerType = this.$createPicker({
+        title: '归属类型',
+        data: [dataTpye],
+        onSelect: (selectedVal, selectedIndex, selectedText) => {
+          this.LastInfo = ""
+          this.ascription = selectedText
+          this.ascId = selectedVal[0]
+          console.log(this.ascId);
+          
+        },
+        onCancel: () => {
+          this.getToast("取消选择",'correct')
+        }
+      })
+    },
     //检查公司
     VerifyCompany(){
       if (!this.jobId) {
         this.getToast("请选择公司类型",'warn')
+        return
+      }else if (!this.ascId) {
+        this.getToast("请输入归属类型",'warn')
         return
       }else if (!this.companyName) {
         this.getToast("请输入公司全称",'warn')
@@ -123,6 +166,7 @@ export default {
             //公司不存在 去完善公司信息
             localStorage.setItem("companyStyle",this.jobId)
             localStorage.setItem("companyName",this.companyName)
+            localStorage.setItem("typeID",this.ascId)
             this.$router.push({path:"/completeInformation"})
           }
           if (res.data.Data.Code==0) {

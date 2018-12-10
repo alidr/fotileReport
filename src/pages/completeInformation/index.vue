@@ -170,6 +170,7 @@ export default {
             ID:0,
             CategoryID:localStorage.getItem("companyStyle"),
             Name:localStorage.getItem("companyName"),
+            TypeID:localStorage.getItem("typeID"),
             ShortName:this.companyEasyName,
             Area:this.areaId,
             Address:this.detailArea,

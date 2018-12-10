@@ -14,6 +14,9 @@ Vue.use(cookie);
 import getHost from './utils/getHost.js'
 Vue.use(getHost);
 
+// import Vconsole from 'vconsole';
+// const vConsole = new Vconsole();
+
 import getToast from './utils/Toast.js'
 Vue.use(getToast);
 

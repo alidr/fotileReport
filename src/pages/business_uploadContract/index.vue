@@ -155,6 +155,23 @@
         </span>
       </div>
     </div>
+    <div class="feiYongDiv" v-if='feiYong'>
+      <div class="imgBox">
+        <div v-for="(item,index) in ImageUrl" :key='index' class="imgList">
+          <i @click="deleteImg(item,index)" class="close">X</i>
+          <img :src="getImgHost()+item.ImageUrl" alt="" :data-ID='item.ID'>
+        </div>
+        <div v-for="(t,i) in newImgUrl" :key='i' class="imgList" v-if="newImgUrl.length>0">
+          <i @click="deleteNewImg(t,i)" class="close">X</i>
+          <img :src="t" alt="">
+        </div>
+        <div class="uploadBox">
+          <input type="file" accept="image/*" class="inputBox" @change="handleInput($event)">
+          <i :style='note'></i>
+        </div>
+      </div>
+
+    </div>
 
     <div class="btn">
       <p v-if='text'>最多上传6张图片</p>
@@ -169,7 +186,7 @@
     <div class="maskLoading" v-if='loading'>
       <cube-loading></cube-loading>
     </div>
-
+    <cube-button @click="showToastMask" v-if='imgLoading'>图片处理中</cube-button>
   </div>
 </template>
 
@@ -180,6 +197,8 @@
   export default {
     data() {
       return {
+        imgLoading: false,
+        feiYong: false, //费用凭证
         isDisable: false,
         loading: false,
         text: false, //最多上传六张
@@ -199,19 +218,26 @@
         image6: '',
         note: {
           backgroundImage: "url(" + require("./addimg_03.png") + ")",
+          backgroundPosition: 'center',
           backgroundRepeat: "no-repeat",
           backgroundSize: "28px auto",
         },
         imgArr: [],
         book: false, //上传授权书
         heTong: true, //上传合同
-
-
+        ImageUrl: [],
+        newImgUrl: [],
+        delImgArr: [],
+        imgLen: '',
+        newImgLen: '',
+        base64Img: '',
+        textNum: 0
       }
     },
-   
+
     created() {
       this.CompanyID = this.$route.query.id
+      this.obtainImg()
       this.style = this.$route.query.style
       if (this.style == 2) {
         this.heTong = true
@@ -234,6 +260,14 @@
         this.btnflag = true
         this.bookBtn = true
         this.moreImg = false
+      } else if (this.style == 4) {
+        this.heTong = false
+        this.feiYong = true
+        this.book = false
+        this.text = false
+        this.btnflag = false
+        this.bookBtn = false
+        this.moreImg = true
       }
     },
     methods: {
@@ -242,8 +276,8 @@
         this.loading = true
         this.imgArr = []
         this.imgArr = [this.image1, this.image2, this.image3, this.image4, this.image5, this.image6]
-        console.log(this.imgArr)
         if (this.style == 2) {
+          console.log(this.imgArr)
           axios({
             url: this.getHost() + '/Company/ContractImageSave',
             method: 'post',
@@ -254,7 +288,6 @@
               ContractImage: this.imgArr
             })
           }).then(res => {
-            console.log(res)
             if (res.data.Status === 1) {
               this.getToast("上传成功", 'warn')
               setTimeout(() => {
@@ -289,8 +322,6 @@
               AuthBookImage: this.image
             })
           }).then(res => {
-            console.log(res)
-            
             if (res.data.Status === 1) {
               this.getToast("上传成功", 'warn')
               setTimeout(() => {
@@ -325,8 +356,6 @@
               ProveImage: this.image
             })
           }).then(res => {
-            console.log(res)
-            
             if (res.data.Status === 1) {
               this.getToast("上传成功", 'warn')
               setTimeout(() => {
@@ -350,9 +379,87 @@
               this.getToast(res.data.Message, 'warn')
             }
           })
+        } else if (this.style == 4) {
+          this.loading = true
+          if (this.delImgArr.length > 0) {
+            axios({
+              url: this.getHost() + '/Company/DelExpenseVoucher',
+              method: 'post',
+              data: qs.stringify({
+                UserId: getCookie('UserId'),
+                token: getCookie('token'),
+                ImageId: this.delImgArr,
+                CompanyID: this.CompanyID,
+              })
+            }).then(res => {
+              if (res.data.Status === 1) {
+                this.getToast("上传成功", 'warn')
+                this.textNum = 1
+                setTimeout(() => {
+                  this.isDisable = false
+                  this.loading = false
+                  this.$router.push({
+                    path: '/companyDetail',
+                    query: {
+                      id: this.CompanyID
+                    }
+                  })
+                }, 2000);
+              } else if (res.data.Status < 0) {
+                this.delCookie("UserId")
+                this.delCookie("token")
+                this.setAccessId('')
+                location.replace('/')
+              } else {
+                this.isDisable = false
+                this.loading = false
+                this.getToast(res.data.Message, 'warn')
+              }
+            })
+
+          }
+          if (this.newImgUrl.length > 0) {
+            console.log(this.newImgUrl)
+            axios({
+              url: this.getHost() + '/Company/ExpenseVoucherSave',
+              method: 'post',
+              data: qs.stringify({
+                UserId: getCookie('UserId'),
+                token: getCookie('token'),
+                CompanyID: this.CompanyID,
+                ImageUrl: this.newImgUrl
+              })
+            }).then(res => {
+              if (res.data.Status === 1) {
+                if (this.textNum != 1) {
+                  this.getToast("上传成功", 'warn')
+                }
+                setTimeout(() => {
+                  this.isDisable = false
+                  this.loading = false
+                  this.$router.push({
+                    path: '/companyDetail',
+                    query: {
+                      id: this.CompanyID
+                    }
+                  })
+                }, 2000);
+              } else if (res.data.Status < 0) {
+                this.delCookie("UserId")
+                this.delCookie("token")
+                this.setAccessId('')
+                location.replace('/')
+              } else {
+                this.isDisable = false
+                this.loading = false
+                this.getToast(res.data.Message, 'warn')
+              }
+            })
+          } else {
+            this.loading = false
+            this.getToast('未选择凭证', 'warn')
+          }
         }
-
-
       },
       cancel() {
         this.$router.push({
@@ -367,7 +474,6 @@
         var files = e.target.files || e.dataTransfer.files;
         if (!files.length) return;
         this.createImageB(files);
-
       },
       // createImage(file) {
       //   var vm = this;
@@ -382,12 +488,57 @@
       delImageB() {
         this.image = "";
       },
+      // 获取费用凭证
+      obtainImg() {
+        axios({
+          url: this.getHost() + '/Company/ExpenseVoucherList',
+          method: 'post',
+          data: qs.stringify({
+            UserId: getCookie('UserId'),
+            token: getCookie('token'),
+            Id: this.CompanyID
+          })
+        }).then(res => {
+          this.ImageUrl = res.data.Data
+        })
+      },
+      // 上传费用凭证
+      handleInput(e) {
+        const toast = this.$createToast({
+          txt: '图片处理中',
+          time: 0,
+          mask: true
+        })
+        toast.show()
+        let file = e.target.files[0];
+        let reader = new window.FileReader()
+        let that = this
+        reader.readAsDataURL(file)
+        reader.onload = function (e) {
+          lrz(e.target.result)
+            .then(function (rst) {
+              // 处理成功会执行
+              toast.hide()
+              that.base64Img = rst.base64;
+              that.newImgUrl.push(that.base64Img)
+
+            });
+
+        }
+      },
+      deleteNewImg(item, index) {
+        this.newImgUrl.splice(index, 1)
+      },
+      deleteImg(item, index) {
+        this.delImgArr.push(item.ID)
+        this.ImageUrl.splice(index, 1)
+
+      },
       onFileChange1: function (e) {
         var dom = e.currentTarget;
         var files = e.target.files || e.dataTransfer.files;
         if (!files.length) return;
         this.createImage(files, 1);
-
       },
       onFileChange2: function (e) {
         var dom = e.currentTarget;
@@ -415,7 +566,6 @@
         var files = e.target.files || e.dataTransfer.files;
         if (!files.length) return;
         this.createImage(files, 5);
-
       },
       onFileChange6: function (e) {
         var dom = e.currentTarget;
@@ -425,16 +575,33 @@
 
       },
       createImageB(file) {
+        const toast = this.$createToast({
+          txt: '图片处理中',
+          time: 0,
+          mask: true
+        })
+        toast.show()
         var vm = this;
         var reader = null;
         reader = new window.FileReader();
         reader.readAsDataURL(file[0]);
         reader.onload = function (e) {
           vm.image = e.target.result;
-          console.log(e.target.result)
+          lrz(e.target.result)
+            .then(function (rst) {
+              // 处理成功会执行
+              toast.hide()
+              vm.image = rst.base64;
+            })
         }
       },
       createImage(file, index) {
+        const toast = this.$createToast({
+          txt: '图片处理中',
+          time: 0,
+          mask: true
+        })
+        toast.show()
         var vm = this;
         var reader = null;
         reader = new window.FileReader();
@@ -454,22 +621,23 @@
             vm.image6 = e.target.result;
           }
           lrz(e.target.result)
-          .then(function (rst) {
-            // 处理成功会执行
-          if (index == 1) {
-              vm.image1 =rst.base64;
-            } else if (index == 2) {
-              vm.image2 = rst.base64;
-            } else if (index == 3) {
-              vm.image3 = rst.base64;
-            } else if (index == 4) {
-              vm.image4 = rst.base64;
-            } else if (index == 5) {
-              vm.image5 = rst.base64;
-            } else if (index == 6) {
-              vm.image6 = rst.base64;
-            }
-          })
+            .then(function (rst) {
+              toast.hide()
+              // 处理成功会执行
+              if (index == 1) {
+                vm.image1 = rst.base64;
+              } else if (index == 2) {
+                vm.image2 = rst.base64;
+              } else if (index == 3) {
+                vm.image3 = rst.base64;
+              } else if (index == 4) {
+                vm.image4 = rst.base64;
+              } else if (index == 5) {
+                vm.image5 = rst.base64;
+              } else if (index == 6) {
+                vm.image6 = rst.base64;
+              }
+            })
         }
       },
       delImage(index) {
@@ -545,19 +713,20 @@
 </script>
 
 <style scoped>
-  .maskLoading{
+  .maskLoading {
     position: fixed;
-    top:0;
+    top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
   }
+
   #uploadContract {
     width: 100%;
     height: 100vh;
     background-color: #fff;
-    overflow: hidden;
+    overflow-y: auto;
   }
 
   .unloadImgCon {
@@ -626,7 +795,7 @@
     align-items: center;
     flex-direction: column;
     margin-top: 20px;
-    position: absolute;
+    position: fixed;
     bottom: 46px;
     width: 100%;
   }
@@ -638,7 +807,9 @@
   }
 
   #button {
+    display: block;
     width: calc(100% - 60px);
+    text-align: center;
   }
 
   #button.cancel {
@@ -754,7 +925,8 @@
     height: 97px;
   }
 
-  #close {
+  #close,
+  .close {
     width: 20px;
     height: 20px;
     position: absolute;
@@ -767,6 +939,7 @@
     align-items: center;
     color: #fff;
     font-size: 12px;
+    z-index: 100;
   }
 
 
@@ -816,6 +989,71 @@
   .vueImg {
 
     width: 100%;
+  }
+
+  .feiYongDiv {
+    width: 94%;
+    margin: 0 auto;
+    padding: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 100px;
+  }
+
+  .imgBox {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .imgList {
+    margin: 6px;
+    width: 97px;
+    height: 97px;
+    border: 1px solid #f0f0f0;
+    position: relative;
+
+  }
+
+  /* .imgBox ul{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  } */
+  .imgList img {
+    width: 80%;
+    height: 80%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+  }
+
+  .uploadBox {
+    width: 97px;
+    height: 97px;
+    background: #f0f0f0;
+    position: relative;
+    border: 1px solid transparent;
+    margin: 6px;
+  }
+
+  .uploadBox i {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .inputBox {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    opacity: 0;
   }
 
 </style>

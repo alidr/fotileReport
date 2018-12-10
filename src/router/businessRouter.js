@@ -97,7 +97,7 @@ export default [ {
     path: '/editCompete',
     component: EditCompete,
     meta: {
-      title: '编辑竞品信息'
+      title: '编辑销售数据'
     },
   }, {
     path: '/myGroup',

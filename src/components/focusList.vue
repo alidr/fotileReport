@@ -5,6 +5,7 @@
           <p class="firstLine">
             <span :class="{red:item.Status==2,yellow:item.Status==1,grey:item.Status==3}">{{item.StatusName}}</span>
             <span v-if="item.Status!=3">剩余保护期:{{item.EndDate}}天</span>
+            <span v-if="item.Status==3">合同剩余时间:{{item.EndTime}}天</span>
           </p>
           <p class="twoLine">
             <span>{{item.Name}}</span>

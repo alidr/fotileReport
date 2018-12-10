@@ -16,16 +16,16 @@
     <div class="model">
       <div class="competition">
         <div class="followDays">
-          <p>{{complete.Month}}月竞品分析数据</p>
+          <p>{{complete.Month}}月销售分析数据</p>
         </div>
         <div class="competitionInfo" v-if="infoNull">
           <p>
-            <span>竞品销量</span>
-            <span>{{complete.SaleCount}}</span>
+            <span>公司销售金额</span>
+            <span>{{complete.CompanySaleCount}}</span>
           </p>
           <p>
-            <span>竞品开工数</span>
-            <span>{{complete.WorkCount}}</span>
+            <span>竞品销量</span>
+            <span>{{complete.SaleCount}}</span>
           </p>
           <p>
             <span>竞品出样量</span>
@@ -33,8 +33,9 @@
           </p>
         </div>
         <div class="competitionNum" v-if="infoNull">
-          <p>门店数量&emsp;{{complete.ShopCount}}</p>
-          <p>设计师数&emsp;{{complete.StylistCount}}</p>
+          <p>门店数&emsp;<span>{{complete.ShopCount}}</span></p>
+          <p>开工数&emsp;<span>{{complete.WorkCount}}</span></p>
+          <p>设计师数&emsp;<span>{{complete.StylistCount}}</span></p>
         </div>
         <div class="infoNull" v-if="!infoNull">
           信息为空
@@ -258,10 +259,13 @@ export default {
     border: none;
   }
 
-  .competitionInfo p span:first-child {
+  .competitionInfo p span:nth-child(1) {
     margin-bottom: 10px;
+    color: #808080;
   }
-
+  .competitionInfo p span:nth-child(2){
+    color: #000;
+  }
   .competitionNum {
     display: flex;
     padding: 10px 0;
@@ -273,9 +277,13 @@ export default {
     justify-content: center;
     align-items: center;
     flex-grow: 1;
+    color: #808080;
   }
 
-  .competitionNum p:first-child {
+  .competitionNum p span{
+    color: #000;
+  }
+  .competitionNum p:nth-child(1),.competitionNum p:nth-child(2) {
     border-right: 1px solid #f0f0f0;
   }
 

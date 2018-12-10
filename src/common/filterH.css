@@ -1,0 +1,285 @@
+  /* 筛选条件样式 */
+  /* <div class="filter">
+  <span class="filterResult">业务员</span>
+  <span class="iconfont icon-xiaosanjiao icon"></span>
+  </div> */
+  .filter {
+    display: flex;
+    border-radius: 4px;
+    width: 50%;
+  }
+
+  .filter span {
+    font-size: 14px;
+    color: #464646;
+    margin-right: 10px;
+  }
+.filter>div{
+  margin: 0 auto;
+}
+  .filter .filterResult {
+    color: #666;
+    padding-left: 5px;
+    box-sizing: border-box;
+  }
+
+  .filter .icon {
+    float: right;
+    display: block;
+    width: 12px;
+    height: 6px;
+    margin-top: 4px;
+  }
+
+  
+
+  .FilterConditions {
+    width: 88%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid #F5F5F5;
+    margin-top: 16px;
+  }
+
+  .FilterConditions i {
+    width: 2px;
+    height: 15px;
+    background: #F5F5F5;
+  }
+
+  .FilterConditions .filter:last-child {
+    margin: 0;
+  }
+
+  .filter .active {
+    color: #D3B067;
+  }
+
+  .selectListStatus {
+    width: 100%;
+    overflow-y: auto;
+    background-color: #F9F9F9;
+    padding-bottom: 80px;
+    max-height: 50vh;
+  }
+
+  .salesmanLists {
+    position: relative;
+    padding-bottom: 80px;
+
+  }
+
+
+  .selectListStatus>li {
+    height: 40px;
+    display: flex;
+    align-items: center;
+
+    padding-left: 15px;
+    box-sizing: border-box;
+  }
+
+  .salesmanLists>li {
+    width: 90%;
+    height: 40px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 20px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom: 1px solid #E6E6E6;
+    margin: 0 auto;
+
+  }
+
+  .widthUL {
+    width: 40%;
+  }
+
+  .emptyBox {
+    display: block;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #D7D7D7;
+    margin-right: 24px;
+  }
+
+  .checkBoxIcon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    line-height: 10px;
+    text-align: center;
+    border: 1px solid #D7D7D7;
+    vertical-align: text-top;
+    overflow: hidden;
+    position: relative;
+    z-index: 101;
+    margin-top: 1px;
+  }
+
+  .checkBoxIcon:before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 10px;
+    border-top: 2px solid white;
+    border-left: 2px solid white;
+    -webkit-transform: rotateZ(-140deg);
+    transform: rotateZ(-140deg);
+  }
+
+  .checkBoxIcon {
+    background-color: #D5AE61;
+    border: 1px solid transparent;
+  }
+
+  .salesmanLists>li label input {
+    opacity: 0;
+  }
+
+  .companyTop ul li.active {
+    color: #BB9F61;
+  }
+
+  .mask {
+    width: 100%;
+    height: 80vh;
+    background-color: rgba(0, 0, 0, .7);
+    position: absolute;
+    z-index: 100;
+  }
+
+  .allListMask{
+    width: 100%;
+    position: absolute;
+    z-index: 300;
+  }
+  .stateContent {
+    width: 100%;
+    max-height: 60vh;
+    overflow-y: auto;
+    position: absolute;
+    z-index: 300;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .allListMask>div:nth-child(1) {
+    display: flex;
+    overflow-y: auto;
+    max-height: 60vh;
+    overflow: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #companyList.active {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .stateContent {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .stateUl {
+    margin: 0 auto;
+    padding: 22px 12px;
+    background: #F9F9F9;
+    padding-bottom: 80px;
+
+  }
+
+  .letterSort {
+    position: fixed;
+    right: 6px;
+    top: 28%;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.4);
+    z-index:10000!important;
+  }
+
+  .letterSort p {
+    text-align: center;
+    color: white;
+    padding:5px 4px;
+  }
+
+  .stateContent h3 {
+    font-size: 14px;
+    color: #171717;
+    font-weight: 550;
+  }
+
+  .stateContent li {
+    padding: 0 16px;
+    line-height: 24px;
+    border-radius: 13px;
+    border: 1px solid #CCCCCC;
+    font-size: 12px;
+    color: #808080;
+    margin-bottom: 16px;
+  }
+  .companyList li:last-child{
+    margin-right: 44%
+  }
+  .stateContent li.active {
+    border: 1px solid transparent;
+    background: #E7C58B;
+    color: white !important;
+  }
+
+  .stateUl ul {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 14px;
+    flex-wrap: wrap;
+
+  }
+
+  .allState {
+    margin-bottom: 20px;
+  }
+
+  .stateBtn {
+    padding: 10px 0;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    background: white;
+    position: absolute;
+    bottom: 0;
+    z-index: 300;
+
+  }
+
+  .stateBtn button {
+    border: none;
+    background: none;
+    padding: 0 68px;
+    line-height: 40px;
+    border-radius: 3px;
+    font-size: 14px;
+    color: white;
+  }
+
+  .stateBtn button.gray {
+    background: #D5D5D5;
+  }
+
+  .stateBtn button.yellow {
+    background: #E2C78F;
+  }
+
+  .salesWidth {
+    width: 100%;
+  }
