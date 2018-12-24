@@ -58,14 +58,18 @@
     color: #D3B067;
   }
 
-  .selectListStatus {
+  .leftList,.rightList {
     width: 100%;
     overflow-y: auto;
-    background-color: #F9F9F9;
     padding-bottom: 80px;
-    max-height: 50vh;
   }
+  .grayF9{
+    background-color: #F9F9F9;
 
+  }
+.white{
+  background-color: #fff ;
+}
   .salesmanLists {
     position: relative;
     padding-bottom: 80px;
@@ -73,13 +77,14 @@
   }
 
 
-  .selectListStatus>li {
+  .leftList>li,.rightList>li {
     height: 40px;
     display: flex;
     align-items: center;
-
+    border-bottom: 1px solid #F5F5F5;
     padding-left: 15px;
     box-sizing: border-box;
+    justify-content: space-between;
   }
 
   .salesmanLists>li {
@@ -100,6 +105,9 @@
 
   .widthUL {
     width: 40%;
+    height: 60vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .emptyBox {
@@ -107,7 +115,7 @@
     width: 16px;
     height: 16px;
     border: 1px solid #D7D7D7;
-    margin-right: 24px;
+    margin-right: 40px;
   }
 
   .checkBoxIcon {
@@ -150,10 +158,11 @@
 
   .mask {
     width: 100%;
-    height: 80vh;
+    height: 50vh;
     background-color: rgba(0, 0, 0, .7);
     position: absolute;
     z-index: 100;
+    bottom: 0;
   }
 
   .allListMask{
@@ -172,10 +181,8 @@
 
   .allListMask>div:nth-child(1) {
     display: flex;
-    overflow-y: auto;
     max-height: 60vh;
     overflow: hidden;
-    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
 

@@ -13,6 +13,9 @@
         <button type="button">已签约
           <span>{{count.Complete}}</span>
         </button>
+        <button type="button">已过期
+          <span>{{count.Complete}}</span>
+        </button>
       </div>
       <div class="search">
         <input type="text" placeholder="请搜索公司名称关键词" v-model="keyword">
@@ -21,52 +24,63 @@
       <div class="FilterConditions ">
         <div class="filter" @click="maskStatus(0)" v-if='postShow'>
           <div>
-          <span class="filterResult" :class="{active:hasMask[0]}">{{salesNum!=0?salesText:statusSelect}}</span>
-          <span v-if='salesNum!=0' :class="{active:hasMask[0]}">({{salesNum}})</span>
-          <img src="./2.png" class="icon" alt="" v-if='hasMask[0]' >
-          <img src="./1.png" class="icon" alt="" v-else>
-        </div>
+            <span class="filterResult" :class="{active:hasMask[0]}">{{salesNum!=0?salesText:statusSelect}}</span>
+            <span v-if='salesNum!=0' :class="{active:hasMask[0]}">({{salesNum}})</span>
+            <img src="./2.png" class="icon" alt="" v-if='hasMask[0]'>
+            <img src="./1.png" class="icon" alt="" v-else>
+          </div>
         </div>
         <i v-if='postShow'></i>
         <div class="filter" @click="maskStatus(2)">
           <div>
-          <span class="filterResult" :class="{active:hasMask[2]}">{{personSelect}}</span>
-          <span v-if='moreNum!=0' :class="{active:hasMask[2]}">({{moreNum}})</span>
-          <img src="./2.png" class="icon" alt="" v-if='hasMask[2]' >
-          <img src="./1.png" class="icon" alt="" v-else>
-        </div>
+            <span class="filterResult" :class="{active:hasMask[2]}">{{personSelect}}</span>
+            <span v-if='moreNum!=0' :class="{active:hasMask[2]}">({{moreNum}})</span>
+            <img src="./2.png" class="icon" alt="" v-if='hasMask[2]'>
+            <img src="./1.png" class="icon" alt="" v-else>
+          </div>
         </div>
       </div>
-      <div class="mask" v-show="hasMask[0]"></div>
-      <div class="mask" v-show="hasMask[2]"></div>
+      
       <div class="allMask">
-        <!-- 经销商列表 -->
+
+
         <div class="allListMask" v-show="hasMask[0]">
+
           <div>
-            <ul class="selectListStatus" :class='{widthUL:salesMask}' v-show='showDistrib'>
-              <li :class="{active:distribFlag}" @click='allDistrib()'>全部经销商</li>
-              <li v-for="(item,index) in Status" :key="index" :class="{active:index==statusHasActive}" @click="statusListActive(index,item.Name,item.ID)">{{item.Name}}</li>
-            </ul>
-            <!-- 业务员列表 -->
-            <div class="scroll-list-wrap saleWarp" v-show="salesMask">
-              <cube-scroll ref="scrollSale" :data="salesmanLists" :options="saleOptions">
-                <ul class="salesmanLists" :class='{salesWidth:!showDistrib}'>
-                  <li :class="{active:salesmanFlag}" @click.stop='allSalesman()'>全部业务员</li>
-                  <li v-for="(item,index) in salesmanLists" :key='index' :dataZM='item.ZM' ref='zmRef'>
-                    <span>{{item.Name}}</span>
-                    <div class="checkIcon" @click='checkSales(item)'>
-                      <i class="emptyBox" :class="{emptyBox:true,checkBoxIcon:isFoodActive.indexOf(item.ID)>-1}"></i>
-                    </div>
-                  </li>
+            <div class="allListMask" v-show="hasMask[0]">
+              <div>
+                <div class="leftUl  widthUL grayF9">
+                <ul class="leftList" v-show='showDistrib'>
+                  <li  v-if='leftList.length<=0' :class='{active:textColor}'>{{allText}}</li>
+                  <li v-for='(item,index) in leftList' @click='leftClick(item,index)' :class='{active:leftList.length>0}'>{{item.Name}}</li>
+                  <li v-if='!salesNumFlag&&!allColor'>全部{{leftAllText}}</li>
+                  <li v-if='salesNumFlag' v-html='"业务员"+"("+salesNum+")"' :class='{active:salesNumFlag}'></li>
                 </ul>
-              </cube-scroll>
-             
+              </div>
+                <!-- 业务员列表 -->
+                <div class="scroll-list-wrap saleWarp" v-show="showDistrib">
+                  <cube-scroll ref="scrollSale" :data="Status" :options="saleOptions">
+                    <ul class="rightList white" v-show='showDistrib'>
+                      <li @click='allClick()' :class='{active:allColor}'>全部{{leftAllText}}</li>
+                      <li v-for="(item,index) in Status" :key='index' :dataZM='item.ZM' @click='clickFlag&&rightClick(item,index)'
+                        :class='{active:rightActive}'>
+                        <span>{{item.Name}}</span>
+                        <div class="checkIcon"  @click='checkSales(item)' v-if='checkBox'>
+                          <i class="emptyBox" :class="{emptyBox:true,checkBoxIcon:isFoodActive.indexOf(item.ID)>-1||boxFlag}"></i>
+                        </div>
+                      </li>
+                    </ul>
+                  </cube-scroll>
+
+                </div>
+              </div>
+              <div class="stateBtn">
+                <button type="button" class="gray" @click='resetSales()'>重 置</button>
+                <button type="button" class="yellow" @click='sureSales()'>确 认</button>
+              </div>
             </div>
           </div>
-          <div class="stateBtn">
-            <button type="button" class="gray" @click='resetSales()'>重 置</button>
-            <button type="button" class="yellow" @click='sureSales()'>确 认</button>
-          </div>
+        
         </div>
         <!-- 高级筛选 -->
         <div class="stateContent" v-show="hasMask[2]">
@@ -91,9 +105,11 @@
           </div>
         </div>
       </div>
-      <div class="letterSort" v-if="salesMask&&hasMask[0]&&sortArr.length>0">
-          <p v-for='item in sortArr' @click='namePosition(item)'>{{item}}</p>
-        </div>
+      <div class="letterSort" v-if="hasMask[0]&&sortArr.length>0">
+        <p v-for='item in sortArr' @click='namePosition(item)'>{{item}}</p>
+      </div>
+      <div class="mask" v-show="hasMask[0]"></div>
+      <div class="mask" v-show="hasMask[2]"></div>
     </div>
     <div class="listWrap">
       <div class="scroll-list-wrap">
@@ -151,10 +167,12 @@
     name: 'HomeDecoration',
     data() {
       return {
+        textColor: true,
         sortArr: [], //字母排序
         postShow: true, //岗位筛选显示隐藏
         moreNum: 0, //高级筛选数量现实
         salesNum: 0, //岗位筛选业务员数量显示
+        salesNumFlag:false,
         salesmanFlag: true, //全部业务员
         distribFlag: true, //全部经销商
         allClassify: true, //全部公司分类
@@ -176,6 +194,10 @@
         }, {
           ID: 3,
           Name: '已签约',
+          check: false,
+        },{
+          ID: 4,
+          Name: '已过期',
           check: false,
         }],
         pageCount: 1,
@@ -205,7 +227,8 @@
         // 业务员
         Person: [],
         hasMask: [false, false, false],
-        statusHasActive: 0,
+        leftActive: 0,
+        rightActive: false,
         statusSelect: "岗位",
         personHasActive: 0,
         personSelect: "高级筛选",
@@ -223,11 +246,18 @@
         topHight: 0,
         zmArr: [],
         nameData: [],
-        salesText:'业务员'
-
-
+        salesText: '业务员',
+        leftList: [],
+        rightList: [],
+        allText: '',
+        linShiArr: [],
+        leftAllText: '',
+        rightIdArr: [],
+        checkBox:false,
+        clickFlag:true,
+        allColor:true,
+        boxFlag:false
       }
-
     },
     computed: {
       options() {
@@ -269,7 +299,6 @@
       this.getPersonList()
       this.getList()
       this.getTotalData()
-      this.statusHasActive = -1
       if (this.AccessId == -1 || this.AccessId == 4) {
         this.admin = true
       }
@@ -398,7 +427,7 @@
           .then(res => {
             if (res.data.Status === 1) {
               this.salesmanLists = res.data.Data.list
-              this.sortArr = res.data.Data.zmlist
+
             } else if (res.data.Status < 0) {
               this.getToast("登录失效，请重新登录", 'warn')
               setTimeout(() => {
@@ -486,14 +515,110 @@
           this.hasMask[index] = false
         } else {
           this.hasMask = [false, false, false]
+          if (this.Status.length > 0) {} else {
+            axios({
+                url: this.getHost() + '/Company/UserInfoListById',
+                method: 'post',
+                data: qs.stringify({
+                  UserId: getCookie('UserId'),
+                  token: getCookie('token'),
+                })
+              })
+              .then(res => {
+                if (res.data.Status == 1) {
+                  this.Status = res.data.Data.list
+                  this.Status.forEach((t, i) => {
+                    this.sortArr = t.zmlist
+                  })
+
+                }
+              })
+          }
+          if (this.AccessId == 2) {
+            this.allText = '所有区域经理'
+          }
+          if (this.AccessId == 1) {
+            this.allText = '所有部门经理'
+          }
+          if (this.AccessId == 3) {
+            this.allText = '所有经销商'
+          }
           if (this.AccessId == 4) {
-            this.salesMask = true
-            this.showDistrib = false
-            this.getPersonList()
+            this.allText = '所有业务员'
+          }
+          if (this.AccessId == -1) {
+            this.allText = '所有分总'
           }
           this.hasMask[index] = true
+        }
+        this.Mask = this.hasMask[index] ? true : false
+
+      },
+      //右边全部按钮点击
+      allClick(){
+        this.allColor=true
+        console.log(this.leftList[this.leftList.length-1])
+        this.boxFlag=!this.boxFlag
+        
+        
+      },
+      //右边列表的点击
+      rightClick(item, index) {
+        this.allColor=false
+        if (this.leftList.length <= 0) {
+          this.leftList.push(item)
+          this.rightIdArr.push(item.ID)
+        } else {
+          this.leftList.forEach((g, h) => {
+            if (this.rightIdArr.indexOf(item.ID) < 0) {
+              this.rightIdArr.push(item.ID)
+              this.leftList.push(item)
+            }
+          })
+        }
+        item.list.forEach((k,l)=>{
+          if(k.list.length<=0){
+            this.clickFlag=false
+            this.checkBox=true
+          }else{
+            this.checkBox=false
+            this.clickFlag=true
+          }
+        })
+        this.Status = item.list
+        this.sortArr = item.zmlist
+        this.Status.forEach((o,p)=>{
+
+        })
+        this.leftAllText=1
+      },
+      //左边列表的点击
+      leftClick(item, index) {
+        if(item.list.length>=0){
+          this.checkBox=false
+          this.clickFlag=true
+
+        }else{
+          this.checkBox=true
+          this.clickFlag=false
+        }
+        this.leftActive = index
+        let idArr = []
+        this.leftList.forEach((e, f) => {
+          e.list.forEach((c, d) => {
+            if (idArr.indexOf(c.ID) < 0) {
+              idArr.push(c.ID)
+            }
+            if (item.ID == c.ID) {
+              this.Status = e.list
+              this.sortArr = e.zmlist
+            }
+          })
+
+        })
+        if (idArr.indexOf(item.ID) < 0) {
           axios({
-              url: this.getHost() + '/Company/UserList',
+              url: this.getHost() + '/Company/UserInfoListById',
               method: 'post',
               data: qs.stringify({
                 UserId: getCookie('UserId'),
@@ -503,38 +628,14 @@
             .then(res => {
               if (res.data.Status == 1) {
                 this.Status = res.data.Data.list
+                this.Status.forEach((t, i) => {
+                  this.sortArr = t.zmlist
+                })
               }
             })
-
         }
-        this.Mask = this.hasMask[index] ? true : false
-
       },
 
-      // 经销商点击事件
-      // 点击全部经销商
-      allDistrib() {
-        this.statusSelect='岗位'
-        this.distribFlag = true
-        this.statusHasActive = -1
-        this.salesMask = false
-        this.DealerID = ''
-      },
-      statusListActive(index, name, id, zmlist) {
-        this.statusSelect=name
-        this.distribFlag = false
-        this.isFoodActive = []
-        this.salesMask = true
-        this.statusHasActive = index
-        this.DealerID = id
-        var arr = []
-        this.Status.forEach((item, index) => {
-          arr.push(item.ID)
-        })
-        var arrIndex = arr.indexOf(this.DealerID)
-        this.salesmanLists = this.Status[arrIndex].list
-        this.sortArr = this.Status[arrIndex].zmlist
-      },
       // 业务员列表重置
       resetSales() {
         this.isFoodActive = []
@@ -549,15 +650,24 @@
       },
 
       checkSales(item) {
+        this.salesNumFlag=true
+
         this.topHight = event.currentTarget.offsetTop
         this.salesmanFlag = false
         let id = item.ID
         let indexId = this.isFoodActive.indexOf(id);
         if (indexId < 0) {
           this.isFoodActive.push(id);
+        this.salesNum = this.isFoodActive.length
           this.SaleID = this.isFoodActive.join(',')
         } else {
           this.isFoodActive.splice(indexId, 1);
+          this.salesNum = this.isFoodActive.length
+          console.log(123)
+          if(this.salesNum==0){
+          this.salesNumFlag=false
+            
+          }
           this.SaleID = this.isFoodActive.join(',')
         }
 
@@ -625,7 +735,7 @@
       namePosition(item) {
         let newList = this.sortArr.slice(0, this.sortArr.indexOf(item))
         let number = 0
-        this.salesmanLists.forEach((el) => {
+        this.Status.forEach((el) => {
           if (newList.indexOf(el.ZM) > -1) {
             number++
           }
@@ -633,9 +743,8 @@
         this.scrollTo(number)
       },
       scrollTo(number) {
-        var liHeight=40//li的高度
-        this.$refs.scrollSale.scrollTo(0,this.scrollToY = -((number) * liHeight),
-        )
+        var liHeight = 40 //li的高度
+        this.$refs.scrollSale.scrollTo(0, this.scrollToY = -((number) * liHeight), )
       },
     }
   }
@@ -653,9 +762,11 @@
     -webkit-overflow-scrolling: touch;
 
   }
-  .saleWarp .cube-scroll-content{
+
+  .saleWarp .cube-scroll-content {
     z-index: 800 !important;
   }
+
   .listWrap .scroll-list-wrap {
     height: calc(100vh - 210px);
   }
@@ -724,7 +835,7 @@
   }
 
   .top .topBtn button {
-    width: 29%;
+    width: 24%;
     height: 38px;
     border-radius: 6px;
     font-size: 14px;
@@ -733,36 +844,20 @@
   }
 
   .top .topBtn button:nth-child(1) {
-    width: 29%;
-    height: 38px;
     background: rgba(246, 234, 212, 1);
-    border-radius: 6px;
     font-size: 14px;
     color: rgba(187, 159, 97, 1);
-    line-height: 38px;
-    text-align: center;
   }
 
   .top .topBtn button:nth-child(2) {
-    width: 29%;
-    height: 38px;
     background: rgba(251, 193, 180, 1);
-    border-radius: 6px;
-    font-size: 14px;
     color: #F26F53;
-    line-height: 38px;
-    text-align: center;
+   
   }
 
   .top .topBtn button:nth-child(3) {
-    width: 29%;
-    height: 38px;
     background: rgba(207, 207, 207, 1);
-    border-radius: 6px;
-    font-size: 14px;
     color: #FFFFFF;
-    line-height: 38px;
-    text-align: center;
   }
 
   .top .search {

@@ -127,10 +127,10 @@
               <i @click="deleteShopMask(true,item.ID,1)" v-if="show"><img src="./delete.png" alt=""></i>
             </p>
             <div class="detail">{{item.Content}}</div>
-            <div class="timeLineImg">
-              <img :src="getImgHost()+item.Image1" alt="" v-if="item.Image1!=''" @click="getImg(item.Image1)">
-              <img :src="getImgHost()+item.Image2" alt="" v-if="item.Image2!=''" @click="getImg(item.Image2)">
-              <img :src="getImgHost()+item.Image3" alt="" v-if="item.Image3!=''" @click="getImg(item.Image3)">
+            <div class="timeLineImg" @click="getTimeImg(item.Image)">
+              <img :src="getImgHost()+item.Image1" alt="" v-if="item.Image1!=''" >
+              <img :src="getImgHost()+item.Image2" alt="" v-if="item.Image2!=''" >
+              <img :src="getImgHost()+item.Image3" alt="" v-if="item.Image3!=''" >
             </div>
           </div>
           <div class="infoNull" v-if="timeList.length==0">
@@ -257,16 +257,7 @@
         </div>
       </div>
     </div>
-    <!-- <div class="swiperMask" v-if='ImgMaskH'>
-      <i @click.stop="imgMask" class="closeSwiper">
-        <img src="./close.png" alt="">
-      </i>
-      <swiper :options="swiperOption" ref="mySwiper">
-        <div class="swiper-slide games" v-for='(t,index) in imgArr' :key='index'>
-          <img :src="getImgHost()+t" alt="" v-gallery="'groupName'">
-        </div>
-      </swiper>
-    </div> -->
+   
   </div>
 </template>
 <script>
@@ -283,6 +274,7 @@
   export default {
     data() {
       return {
+        timeLineImg:[],
         freeBtn: false,
         applyqy: true, //签约凭证
         swiperOption: {
@@ -642,7 +634,6 @@
                   this.btn4Active = true
                   this.applyqy = false
                   this.applyhe = false
-                  console.log(this.data.Status)
                   if (this.data.ExpenseVoucherList == '' || this.data.ExpenseVoucherList == null) {
                     this.applyqy = true
                     this.btn4Active = true
@@ -753,6 +744,8 @@
           .then(res => {
             if (res.data.Status === 1) {
               this.timeList = res.data.Data.list
+              console.log(this.timeList)
+
             } else if (res.data.Status < 0) {
               this.delCookie("UserId")
               this.delCookie("token")
@@ -851,9 +844,24 @@
       getImg(src) {
         this.$createImagePreview().remove()
         this.src = [this.getImgHost() + src]
-        console.log(this.src)
         this.$createImagePreview({
           imgs: this.src,
+          zIndex:10000,
+          preventDefault:false
+        }).show()
+      },
+      getTimeImg(src){
+        this.$createImagePreview().remove()
+        this.imgArr = src.split(',')
+        this.imgArr.forEach((item, index) => {
+          let itemSrc = this.getImgHost() + item
+          let itemSrcId= this.timeLineImg.indexOf(itemSrc)
+          if (itemSrcId < 0) {
+            this.timeLineImg.push(this.getImgHost() + item)
+          }
+        });
+        this.$createImagePreview({
+          imgs: this.timeLineImg,
           zIndex:10000,
           preventDefault:false
         }).show()

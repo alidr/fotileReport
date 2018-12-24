@@ -7,7 +7,7 @@
         <span @click="search">搜索</span>
       </div>
       <div class="FilterConditions ">
-        <div class="filter">
+        <!-- <div class="filter">
           <span class="filterResult">{{statusSelect}}</span>
           <span class="iconfont icon-xiaosanjiao icon" @click="maskStatus(0)"></span>
         </div>
@@ -18,11 +18,41 @@
          <div class="filter" v-if="!selected">
           <span class="filterResult">{{personSelect}}</span>
           <span class="iconfont icon-xiaosanjiao icon" @click="maskStatus(2)"></span>
+        </div> -->
+        <div class="filter" @click="maskStatus(2)">
+          <div>
+            <span class="filterResult" :class="{active:hasMask[2]}">{{personSelect}}</span>
+            <span v-if='moreNum!=0' :class="{active:hasMask[2]}">({{moreNum}})</span>
+            <img src="./2.png" class="icon" alt="" v-if='hasMask[2]'>
+            <img src="./1.png" class="icon" alt="" v-else>
+          </div>
         </div>
-       
       </div>
-      
-      <ul class="selectListStatus" v-show="hasMask[0]">
+      <div class="mask" v-show="hasMask[2]"></div>
+       <!-- 高级筛选 -->
+       <div class="stateContent" v-show="hasMask[2]">
+        <div class="stateUl">
+          
+          <!-- 公司分类 -->
+          <h3>公司分类</h3>
+          <ul class="companyList">
+            <li :class='{active:allClassify}' @click='checkClassify()'>公司分类</li>
+            <li v-for="(item,index) in Style" :key="index" :class="{active:isStyle.indexOf(item.ID)>-1}" @click="companyCheck(item)">{{item.Name}}</li>
+          </ul>
+          <!-- 全部状态 -->
+          <h3>公司属性</h3>
+          <ul class="allState">
+            <li :class='{active:allStatus}' @click='checkAllStatus()'>全部</li>
+            <li v-for="(item,index) in allStateText" :key="index" :class="{active:isStatus.indexOf(item.ID)>-1}"
+              @click="stateCheck(item)">{{item.Name}}</li>
+          </ul>
+        </div>
+        <div class="stateBtn">
+          <button type="button" class="gray" @click='resetState(allStateText)'>重 置</button>
+          <button type="button" class="yellow" @click='sureState()'>确 认</button>
+        </div>
+      </div>
+      <!-- <ul class="selectListStatus" v-show="hasMask[0]">
         <li v-for="(item,index) in Status" :key="index" :class="{active:index==statusHasActive}" @click="statusListActive(index,item.Name,item.ID)">{{item.Name}}</li>
         <div class="mask"></div>
       </ul>
@@ -33,7 +63,7 @@
       <ul class="selectListPerson" v-show="hasMask[2]">
         <li v-for="(item,index) in Person" :key="index" :class="{active:index==personHasActive}" @click="personListActive(index,item.Name,item.ID)">{{item.Name}}</li>
         <div class="mask"></div>
-      </ul>
+      </ul> -->
 
 
     </div>
@@ -113,19 +143,23 @@
         Person: [],
         personHasActive: 0,
         personSelect: "全部组员",
-        // 公司状态列表
-        Status: [{
-          ID: '',
-          Name: '全部状态'
+        // 全部分类
+        allStateText: [{
+          ID: 1,
+          Name: '洽谈中',
+          check: false,
         }, {
-          ID: -1,
-          Name: '已放弃'
+          ID: 2,
+          Name: '签约中',
+          check: false,
         }, {
-          ID: -2,
-          Name: '已删除'
-        }, {
-          ID: 0,
-          Name: '已新建'
+          ID: 3,
+          Name: '已签约',
+          check: false,
+        },{
+          ID: 4,
+          Name: '已过期',
+          check: false,
         }],
         // 公司类型列表
         Style: [],
@@ -135,9 +169,14 @@
         // hasPersonMask:false,
         statusHasActive: 0,
         statusSelect: "全部状态",
-        styleHasActive: 0,
-        styleSelect: "全部类型",
+        
         emptyFlag: false,
+        personSelect: "高级筛选",
+        moreNum: 0, //高级筛选数量现实
+        allClassify: true, //全部公司分类
+        allStatus: true, //全部公司状态
+        isStatus: [],
+        isStyle: [],
       }
     },
     components:{
@@ -204,7 +243,6 @@
           })
         })
         .then(res=>{
-          console.log(res)
           if (res.data.Status===1) {
             this.Person = res.data.Data.list
             this.Person.unshift({
@@ -251,13 +289,9 @@
           })
         })
         .then(res=>{
-          console.log(res,33)
           if (res.data.Status===1) {
             this.Style = res.data.Data.list
-            this.Style.unshift({
-                ID: '',
-                Name: '全部类型'
-            })
+            
           }else if (res.data.Status<0) {
             this.getToast("登录失效，请重新登录",'warn')
             setTimeout(() => {
@@ -273,9 +307,6 @@
         })
       },
       maskStatus(index) {
-        console.log(index);
-        console.log(this.hasMask[index]);
-        
         if (this.hasMask[index] == true) {
           
           this.hasMask[index] = false
@@ -338,12 +369,10 @@
           })
         })
         .then(res=>{
-          console.log(res,77)
           if (res.data.Status===1) {
             this.pageCount = res.data.Data.pageCount
                 if (this.page==1) {
                   this.list = res.data.Data.list
-                  console.log(this.list,999)
                 }else{
                if (this.list.length>0&&this.page>1) {
                   // 如果有新数据
@@ -391,7 +420,6 @@
           })
         })
         .then(res=>{
-          console.log(res,88)
           if (res.data.Status===1) {
            this.pageCount = res.data.Data.pageCount
                 if (this.page==1) {
@@ -415,7 +443,6 @@
               
             } 
             
-            console.log(this.checkBoxs);
             if (this.list.length==0) {
                 this.emptyFlag = true
             }else{
@@ -434,7 +461,6 @@
         })
       },
       check(index,id){
-        console.log(index)
         if (this.checkBoxs[index]) {
           this.checkBoxs[index]=false
           this.checkAllBox = false
@@ -458,23 +484,19 @@
 
         this.idList = this.idList.slice()
         this.checkBoxs = this.checkBoxs.slice()
-        console.log(this.idList);
         
 
       },
       checkAll(list){
         
         if (this.checkAllBox) {
-          console.log(111)
           this.checkAllBox =false
-          console.log(this.checkBoxs);
           this.idList = this.idList.splice()
           for (let i = 0; i <list.length; i++) {
             this.checkBoxs[i]= false
           }
           this.checkBoxs = this.checkBoxs.slice()
         }else{
-          console.log(222);
           
           this.checkAllBox = true
           for (let i = 0; i < list.length; i++) {
@@ -483,10 +505,60 @@
           }
            this.checkBoxs = this.checkBoxs.slice()
            this.idList = this.idList.slice()
-           console.log(this.checkBoxs);
         }
-        console.log(this.idList);
 
+      },
+       //点击全部分类
+       checkAllStatus() {
+        this.allStatus = !this.allStatus
+        this.isStatus = []
+        this.StatusID = ''
+      },
+       //点击公司分类
+       checkClassify() {
+        this.allClassify = !this.allClassify
+        this.isStyle = []
+        this.TypeID = ''
+      },
+      companyCheck(item) {
+        this.allClassify = false
+        let id = item.ID
+        let indexId = this.isStyle.indexOf(id);
+        if (indexId < 0) {
+          this.isStyle.push(id);
+          this.TypeID = this.isStyle.join(',')
+        } else {
+          this.isStyle.splice(indexId, 1);
+          this.TypeID = this.isStyle.join(',')
+        }
+      },
+      //高级筛选点击重置
+      resetState() {
+        this.isStyle = []
+        this.isStatus = []
+        this.TypeID = ''
+        this.StatusID = ''
+        this.allClassify = true
+        this.allStatus = true
+      },
+      //高级筛选点击确认
+      sureState() {
+        this.moreNum = this.isStatus.length + this.isStyle.length
+        this.page = 1
+        this.getList()
+        this.maskStatus(2)
+      },
+      stateCheck(item) {
+        this.allStatus = false
+        let id = item.ID
+        let indexId = this.isStatus.indexOf(id);
+        if (indexId < 0) {
+          this.isStatus.push(id);
+          this.StatusID = this.isStatus.join(',')
+        } else {
+          this.isStatus.splice(indexId, 1);
+          this.StatusID = this.isStatus.join(',')
+        }
       },
       distribution(){
         if (this.idList.length==0) {
@@ -505,14 +577,12 @@
 </script>
 
 <style scoped>
-  @import '../../common/filter.css';
-
+  /* @import '../../common/filter.css'; */
+  @import '../../common/filterH.css';
   .scroll-list-wrap {
   height: calc(100vh - 150px);
 }
-  .FilterConditions {
-    padding: 0 10px;
-  }
+  
   .CompanyFollow {
     width: 100%;
     overflow: hidden;
@@ -524,7 +594,6 @@
     margin: 0 auto;
     padding-top: 20px;
     background: white;
-    padding-bottom: 16px;
     margin-bottom: 12px;
   }
 
@@ -824,5 +893,10 @@
   background:#CFCFCF ;
   color: #fff ;
 }
-
+.companyList{
+  margin-bottom: 20px;
+}
+.allState{
+  margin: 0;
+}
 </style>
