@@ -14,7 +14,6 @@
               <p class="person">业务员<span>{{data.UName}}</span></p>
               <p class="spanText">归属类型<span>{{data.TypeName}}</span></p>
             </div>
-
           </div>
           <div class="topIcon">
             <span @click="showMask(true)" v-if="edit">
@@ -98,16 +97,15 @@
           <span class="statusDetail" :class="{'active':btn3Active}">签约成功，上传合同</span>
           <a href="javascript:;" class="applyBtn" :class="{'active':btn3Active}" v-if="applyhe" @click="uploadContract(2)">上传签约合同</a>
           <a href="javascript:;" class="applyBtn" :class="{'active':btn3Active}" v-if="applquyu">上传签约合同</a>
-          <a href="javascript:;" class="applyBtn active" v-if="!applyhe&&!applquyu" @click="getImgH(data.ContractImage)">查看合同</a>
+          <a href="javascript:;" class="applyBtn active" v-if="!applyhe&&!applquyu" @click="showImagePreviewHT(data.ContractImage)">查看合同</a>
         </p>
         <span class="line"></span>
         <p class="uploadContract">
           <span class="round" :class="{'active':btn4Active}"><i :class="{'active':btn4Active}">4</i></span>
           <span class="statusDetail" :class="{'active':btn4Active}">上传签约凭证</span>
-          <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" @click="uploadContract(4)"
-            v-if='applyqy'>上传费用凭证</a>
-            <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" v-if='freeBtn'>上传费用凭证</a>
-          <a href="javascript:;" class="applyBtn active" v-if="!applyqy&&!freeBtn" @click="getImgH(data.ExpenseVoucherList)">查看费用凭证</a>
+          <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" @click="uploadContract(4)" v-if='applyqy'>上传费用凭证</a>
+          <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" v-if='freeBtn'>上传费用凭证</a>
+          <a href="javascript:;" class="applyBtn active" v-if="!applyqy&&!freeBtn" @click="showImagePreviewPZ(data.ExpenseVoucherList)">查看费用凭证</a>
           <span class="applyStatus active" v-if="reApplyqy" @click="uploadContract(4)">编辑上传</span>
         </p>
       </div>
@@ -259,7 +257,7 @@
         </div>
       </div>
     </div>
-    <div class="swiperMask" v-if='ImgMaskH'>
+    <!-- <div class="swiperMask" v-if='ImgMaskH'>
       <i @click.stop="imgMask" class="closeSwiper">
         <img src="./close.png" alt="">
       </i>
@@ -268,7 +266,7 @@
           <img :src="getImgHost()+t" alt="" v-gallery="'groupName'">
         </div>
       </swiper>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -285,7 +283,7 @@
   export default {
     data() {
       return {
-        freeBtn:false,
+        freeBtn: false,
         applyqy: true, //签约凭证
         swiperOption: {
           autoplay: 4000,
@@ -329,7 +327,7 @@
           ProveImage: ''
         },
         isShowImg: false,
-        src: '',
+        src: [],
         isExpend: false,
         expendWord: "展开",
         applyshou: true,
@@ -372,13 +370,16 @@
         imgStr: '',
         typeGui: '',
         applquyu: false,
-        ExpenseVoucherList:'',//费用凭证
+        ExpenseVoucherList: '', //费用凭证
+        imgs: [],
+        imgMaskArrHT: [],
+        imgMaskArrPZ:[]
 
       }
 
     },
     created() {
-      
+
       localStorage.removeItem("companyId")
       this.stylePlay = this.$route.query.stylePlay || ""
       this.ID = this.$route.query.id
@@ -398,7 +399,7 @@
       //   return this.$refs.mySwiper.swiper
       // }
     },
-
+    
     methods: {
       deleteSelect() {
         if (this.type == 1) {
@@ -507,7 +508,7 @@
           this.show = false
         }
         this.getInfo(this.ID)
-        
+
       },
       //判断直营店模块
       // showShopModel(){
@@ -637,10 +638,10 @@
                 //   this.btn3Active = true
                 // }
                 if (this.data.Status == 3) {
-                  this.btn3Active=false
+                  this.btn3Active = false
                   this.btn4Active = true
-                  this.applyqy=false
-                  this.applyhe=false
+                  this.applyqy = false
+                  this.applyhe = false
                   console.log(this.data.Status)
                   if (this.data.ExpenseVoucherList == '' || this.data.ExpenseVoucherList == null) {
                     this.applyqy = true
@@ -677,14 +678,14 @@
                   this.btn3Active = false
                 }
                 if (this.data.ExpenseVoucherList == '' || this.data.ExpenseVoucherList == null) {
-                    this.applyqy = false
-                    this.btn4Active = false
-                    this.freeBtn=true
-                  } else {
-                    this.reApplyqy = false
-                    this.applyqy = false
+                  this.applyqy = false
+                  this.btn4Active = false
+                  this.freeBtn = true
+                } else {
+                  this.reApplyqy = false
+                  this.applyqy = false
 
-                  }
+                }
               }
               //区域经理
               if (this.AccessId == 3) {
@@ -696,15 +697,15 @@
                   this.btn2Active = true
                   this.applquyu = false
                   this.applyhe = false
-                  if(this.data.ContractImage){
+                  if (this.data.ContractImage) {
                     this.applquyu = false
                     this.applyhe = false
 
-                  }else{
+                  } else {
                     this.applquyu = true
                     this.applyhe = false
                   }
-                  
+
                 } else {
                   if (this.data.Status == 2 || this.data.Status == 3) {
                     this.applyshu = true
@@ -848,14 +849,46 @@
         })
       },
       getImg(src) {
-        this.src = this.getImgHost() + src
-        this.isImgMask = true
-        this.isShowImg = true
+        this.$createImagePreview().remove()
+        this.src = [this.getImgHost() + src]
+        console.log(this.src)
+        this.$createImagePreview({
+          imgs: this.src,
+          zIndex:10000,
+          preventDefault:false
+        }).show()
       },
-      getImgH(src) {
+      showImagePreviewHT(src) {
+        this.$createImagePreview().remove()
         this.imgArr = src.split(',')
-        this.ImgMaskH = true
-
+        this.imgArr.forEach((item, index) => {
+          let itemSrc = this.getImgHost() + item
+          let itemSrcId= this.imgMaskArrHT.indexOf(itemSrc)
+          if (itemSrcId < 0) {
+            this.imgMaskArrHT.push(this.getImgHost() + item)
+          }
+        });
+        this.$createImagePreview({
+          imgs: this.imgMaskArrHT,
+          zIndex:10000,
+          preventDefault:false
+        }).show()
+      },
+      showImagePreviewPZ(src) {
+        this.$createImagePreview().remove()
+        this.imgArr = src.split(',')
+        this.imgArr.forEach((item, index) => {
+          let itemSrc = this.getImgHost() + item
+          let itemSrcId = this.imgMaskArrPZ.indexOf(itemSrc)
+          if (itemSrcId < 0) {
+            this.imgMaskArrPZ.push(this.getImgHost() + item)
+          }
+        });
+        this.$createImagePreview({
+          imgs: this.imgMaskArrPZ,
+          zIndex:10000,
+          preventDefault:false
+        }).show()
       },
       imgMask() {
         this.ImgMaskH = false
@@ -946,7 +979,7 @@
           })
         }
       },
-      
+
       //放弃跟进
       giveUpFollow() {
         if (!this.giveUpReason) {
@@ -1370,9 +1403,11 @@
   .applyStatus.active {
     color: #666;
   }
-  .applyStatus.active{
+
+  .applyStatus.active {
     color: #9c9c9c;
   }
+
   /* 跟单时间线 */
 
   .followTimeTop,

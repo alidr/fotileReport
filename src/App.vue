@@ -224,4 +224,8 @@
 .saleWarp .cube-scroll-content{
     z-index: 300 !important;
   }
+  .cube-image-preview-item .cube-image-preview-img{
+    width: 80% !important;
+    margin: 0 auto;
+  }
 </style>
