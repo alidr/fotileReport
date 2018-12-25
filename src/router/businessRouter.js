@@ -16,6 +16,8 @@ const MyGroup = () => import('@/pages/business_myGroup')
 const CompanyFollow = () =>import ('@/pages/admin_CompanyFollow')
 const CompanyContract = () =>import ('@/pages/busniess_companyContract')
 const GiveUpCompany = () =>import ('@/pages/busniess_giveUpCompany')
+const applyRenewal = () => import('@/pages/applyRenewal_business')
+const renewalDetail = () => import('@/pages/renewalDetail_business')
 
 
 
@@ -125,4 +127,18 @@ export default [ {
       title: '放弃跟进'
     },
   },
+  {
+    path: '/applyRenewal',
+    component: applyRenewal,
+    meta: {
+      title: '申请续签'
+    },
+  },
+  {
+    path: '/renewalDetail',
+    component: renewalDetail,
+    meta: {
+      title: '申请续签详情'
+    },
+  }
 ]
