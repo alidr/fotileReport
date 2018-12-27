@@ -1,3 +1,4 @@
+
 // const Demo = () => import ('@/pages/admin_demo')
 const AdminIndex = () => import ('@/pages/admin_index')
 const AddCompany = () => import ('@/pages/addCompany')
@@ -79,13 +80,15 @@ export default [{
   path: '/CompanyFollow',
   component: CompanyFollow,
   meta: {
-    title: '公司待跟进'
+    title: '公司待跟进',
+    keepAlive:true
   },
 }, {
   path: '/UserList',
   component: UserList,
   meta: {
-    title: '用户列表'
+    title: '用户列表',
+    keepAlive:true
   },
 }, {
   path: '/addUser',
@@ -127,3 +130,7 @@ export default [{
   },
 },
 ]
+
+
+
+

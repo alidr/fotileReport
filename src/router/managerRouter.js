@@ -47,7 +47,8 @@ export default [
   path: '/UserList',
   component: UserList,
   meta: {
-    title: '用户列表'
+    title: '用户列表',
+    keepAlive:true
   },
 }, {
   path: '/appeal',

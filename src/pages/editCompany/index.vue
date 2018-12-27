@@ -19,14 +19,18 @@
         <input type="text" placeholder="请输入家装公司简称" v-model="data.ShortName">
       </div>
       <div class="input" @click="showPicker">
-        <span>公司所在地<i>*</i></span>
+        <span>省市区<i>*</i></span>
         <input type="text" placeholder="省市区" v-model="area" :areaId="areaId" readonly="readonly" unselectable="on" onfocus="this.blur()">
         <i class="arrow"></i>
       </div>
       <div class="input">
-        <span>详细地址<i>*</i></span>
-        <input type="text" placeholder="请输入详细地址" v-model="data.Address">
+        <span>公司地址<i>*</i></span>
+        <input type="text" placeholder="请输入公司地址" v-model="data.Address">
       </div>
+       <div class="input">
+         <span>门牌号</span>
+         <input type="text" placeholder="请输入门牌号，例302室" v-model='data.HouseNumber'>
+       </div>
       <div class="input">
         <span>公司状态</span>
         <input type="text" placeholder="请选择" v-model="data.StatusName" readonly>
@@ -109,6 +113,7 @@
           ShortName: '',
           Status: '',
           StatusName: '',
+          HouseNumber:'',
           ProvinceCode: '',
           CityCode: '',
           AreaCode: '',
@@ -295,12 +300,13 @@
                   if (this.AccessId==-1) {
                     this.$router.push({path:"/adminIndex"})
                   }else{
-                  this.$router.push({
+                  this.$router.replace({
                     path: "/companyDetail",
                     query: {
                       id: this.Id
                     }
                   })
+                  this.$router.go(-1)
                   }
                 }, 2000);
               } else if (res.data.Status < 0) {

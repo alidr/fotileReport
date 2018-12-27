@@ -7,7 +7,7 @@
     <div class="cantain">
       <div class="waitList" v-for="(item,index) in companyList" :key="index">
         <div class="firstLine">
-          <span class="status" :class="{red:item.Status==2,yellow:item.Status==1,grey:item.Status==3}">{{item.StatusName}}</span>
+          <span class="status" :class="{qiaTan:item.Status==1,qianYue:item.Status==2,qianYued:item.Status==3,fangQi:item.Status==-1,xinJian:item.Status==0,guoQi:item.Status==-3}">{{item.StatusName}}</span>
           <!-- <span class="status" v-if="item.Status == 1">已完成</span> -->
           <span class="name">{{item.Name}}</span>
           <p class="waitNum" v-if="(item.Surplus < item.Enddate)||(item.Surplus > item.Enddate)&&!item.IsShow">
@@ -293,7 +293,7 @@
   .status {
     padding: 5px 10px;
     background-color: #F6EAD4;
-    color: #BB9F61;
+    color: #ffffff;
     border-radius: 4px;
     margin-right: 10px;
   }
@@ -365,19 +365,25 @@
     justify-content: space-between;
   }
 
-  .red {
-    background-color: #FBC1B4;
-    color: #F26F53
-  }
+  .fangQi {
+  background: #CFCFCF;
+}
 
-  .yellow {
-    background-color: #F6EAD4;
-    color: #BB9F61;
-  }
+.xinJian {
+  background: #BFDBC3;
+}
 
-  .grey {
-    background-color: #ccc;
-    color: #fff
-  }
+.qiaTan {
+  background: #ECDBBD;
+}
+.qianYue{
+  background: #F4B5A7;
+}
+.qianYued{
+  background: #F3CF9D;
+}
+.guoQi{
+  background: #CDDFEE;
+}
 
 </style>

@@ -186,7 +186,8 @@ export default {
         if (res.data.Status===1) {
           this.getToast("发布公告成功,将跳转至公告管理",'warn')
           setTimeout(() => {
-            this.$router.push({path: '/announceList'})
+            this.$router.replace({path: '/announceList'})
+            this.$router.go(-1)
           }, 2000);
         }else if (res.data.Status<0) {
           this.delCookie("UserId")
