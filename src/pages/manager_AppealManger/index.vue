@@ -4,12 +4,20 @@
     <div class="btn">
       <button type="button" :class="{active:style==1}" @click="active(1)">授权审批</button>
       <button type="button" :class="{active:style==2}" @click="active(2)">合同审批</button>
+      <button type="button" :class="{active:style==3}" @click="active(3)" v-if="AccessId==1||AccessId==2">续签审批</button>
     </div>
     <div class="appealList">
       <ul>
         <li v-for="(item,index) in list" :key="index" @click="applyDetail(item.CompanyID)">
-          <span>{{item.TypeName}}</span>
-          <i>提交日期 {{item.Date}}</i>
+          <div class="oneLine">
+            <p>
+              <span class="lable">{{item.TypeName}}</span>
+              <span v-if="item.Status==0" style="color:#C19F57">待审核</span>
+              <span v-if="item.Status==1" style="color:#6997C0">通过，合同剩余{{item.EndTime}}天</span>
+              <span v-if="item.Status==-1" style="color:#F26F53">不通过，合同剩余{{item.EndTime}}天</span>
+            </p>
+            <i>提交日期 {{item.Date}}</i>
+          </div>
           <div class="up">
             <p class="name">{{item.CompanyName}} </p>
             <!-- <b class="salesman">业务员{{item.UserName}}</b> -->
@@ -19,7 +27,8 @@
             </div>
           </div>
           <div class="down">
-            <i @click.stop="showListMask(true,item.CompanyID)">查看相似公司</i>
+            <a href="" style="border-bottom:1px solid #ccc;padding:3px 0;" v-if="data.TypeID">点击查看申请详情</a>
+            <i @click.stop="showListMask(true,item.CompanyID)" v-if="!data.TypeID">查看相似公司</i>
             <a href="javascript:;">
               <span>查看公司详情>></span>
             </a>
@@ -82,12 +91,19 @@
         listFlag: true,
         isShowMask:false,
         giveUpReason:'',
-        ID:''
+        ID:'',
+        IsSort:'',
+        Status:'',
+        data:{}
       }
+    },
+    computed: {
+      ...mapGetters([
+        'AccessId'
+      ])
     },
     components:{
       empty
-
     },
     created() {
       this.getList(1)
@@ -106,7 +122,6 @@
         this.listmask = bool
         if (bool) {
           console.log(id);
-
           this.getSimilarList(id)
         }
       },
@@ -139,20 +154,42 @@
           })
       },
       getList(TypeID) {
+        let url = ''
+        let params = {}
+        if (TypeID==1 || TypeID==2) {
+          url = this.getHost() + '/Approval/GetFollowList'
+          params = {
+            UserId: getCookie('UserId'),
+            token: getCookie('token'),
+            TypeID: TypeID,
+            IsSort: this.IsSort,
+            Status: this.Status
+          }
+        } else if(TypeID==3){
+          url = this.getHost() + '/Approval/RenewFollowList'
+          params = {
+            UserId: getCookie('UserId'),
+            token: getCookie('token'),
+            IsSort: this.IsSort,
+            Status: this.Status
+          }
+        }
         this.axiosloading()
         axios({
-            url: this.getHost() + '/Approval/GetFollowList',
+            url: url,
             method: 'post',
-            data: qs.stringify({
-              UserId: getCookie('UserId'),
-              token: getCookie('token'),
-              TypeID: TypeID,
-            })
+            data: qs.stringify(params)
           })
           .then(res => {
             console.log(res)
             if (res.data.Status === 1) {
+              if (TypeID==3) {
+                res.data.Data['TypeID'] = 3
+              }
               this.list = res.data.Data.list
+              this.data = res.data.Data
+              console.log(this.data,'data');
+              
               if (this.list == '') {
                 this.emptyFlag = true
               } else {
@@ -173,7 +210,6 @@
       },
       active(style) {
         console.log(style);
-
         this.style = style
         this.getList(style)
       },
@@ -295,10 +331,10 @@
   }
 
   .btn {
-    width: 58%;
+    /* width: 58%; */
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     padding: 16px 0;
   }
 
@@ -310,9 +346,7 @@
     line-height: 29px;
     text-align: center;
     font-size: 14px;
-
-
-
+    margin-right: 10px;
   }
 
   .btn button.active {
@@ -343,8 +377,13 @@
     padding-bottom: 20px;
     border-radius: 4px;
   }
+  .appealList ul li .oneLine{
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+  }
 
-  .appealList ul li>span {
+  .appealList ul li .oneLine .lable {
     display: inline-block;
     background: rgba(246, 234, 212, 1);
     border-radius: 0px 10px 10px 0px;
@@ -359,8 +398,11 @@
     flex-grow: 1; */
     /* margin-right: 140px; */
   }
+  .appealList ul li .oneLine span{
+    font-size: 10px;
+  }
 
-  .appealList ul li>i {
+  .appealList ul li .oneLine>i {
     font-style: normal;
     font-size: 12px;
     color: rgba(76, 76, 76, 1);
@@ -448,7 +490,9 @@
     width: 90%;
     overflow: hidden;
     margin-left: 20px;
-
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .appealList ul li .down i {
@@ -458,7 +502,6 @@
   }
 
   .appealList ul li .down a {
-    float: right;
     font-size: 12px;
     color: rgba(128, 128, 128, 1);
   }

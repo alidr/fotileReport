@@ -5,11 +5,11 @@
       <div class="companyInfo">
         <div class="input">
           <span>家装公司</span>
-          <input type="text" placeholder="xxxxxxx公司" readonly="readonly" unselectable="on" onfocus="this.blur()">
+          <input type="text" placeholder="xxxxxxx公司" readonly="readonly" unselectable="on" onfocus="this.blur()" v-model="info._companyName">
         </div>
         <div class="input">
           <span>申请人</span>
-          <input type="text" placeholder="当前业务员" readonly="readonly" unselectable="on" onfocus="this.blur()">
+          <input type="text" placeholder="当前业务员" readonly="readonly" unselectable="on" onfocus="this.blur()" v-model="info._UName">
         </div>
       </div>
     </div>
@@ -97,44 +97,44 @@
       <div class="historyContain">
         <div class="input bottomLine">
           <span>今年累计销额</span>
-          <input type="text" placeholder="xxxxxxx公司" readonly="readonly" unselectable="on" onfocus="this.blur()">
+          <input type="text" placeholder="累计销额" readonly="readonly" unselectable="on" onfocus="this.blur()" v-model="historyInfo.CompanySalePrice">
         </div>
         <div class="historyList">
           <div class="apply">
             <div class="input timeInput">
               <span>合作时间<i>*</i></span>
               <div class="timeChang">
-                  <p class="time"><span>{{startDate}}</span>至<span>{{endDate}}</span></p>
+                  <p class="time"><span>{{historyInfo.CoopStartDate}}</span>至<span>{{historyInfo.CoopEndDate}}</span></p>
               </div>
             </div>
             <div class="input">
               <span>全年预估销额<i>*</i></span>
-              <input type="number" placeholder="请输入销量值" v-model="estimate" readonly="readonly" unselectable="on" onfocus="this.blur()">
+              <input type="number" placeholder="销量值" v-model="historyInfo.SalePrice" readonly="readonly" unselectable="on" onfocus="this.blur()">
               元
             </div>
             <div class="input">
               <span>进场费<i>*</i></span>
-              <input type="number" placeholder="请输入进场费" v-model="slotAll" readonly="readonly" unselectable="on" onfocus="this.blur()">元
+              <input type="number" placeholder="进场费" v-model="historyInfo.DoorMoney" readonly="readonly" unselectable="on" onfocus="this.blur()">元
             </div>
             <div class="input">
               <span>活动费<i>*</i></span>
-              <input type="number" placeholder="请输入活动费" v-model="activities" readonly="readonly" unselectable="on" onfocus="this.blur()">
+              <input type="number" placeholder="活动费" v-model="historyInfo.ActivityFee" readonly="readonly" unselectable="on" onfocus="this.blur()">
               元
             </div>
             <div class="input">
               <span>固定费用<i>*</i></span>
-              <input type="number" placeholder="请输入固定费用" v-model="price" readonly="readonly" unselectable="on" onfocus="this.blur()">
+              <input type="number" placeholder="固定费用" v-model="historyInfo.FixedFee" readonly="readonly" unselectable="on" onfocus="this.blur()">
               元
             </div>
             <div class="input explain">
               <span class="span">固定费用说明<i>*</i></span>
-              <textarea name="" id="" placeholder="请输入费用明细，不得超过200个字" v-model="explain" readonly="readonly" unselectable="on" onfocus="this.blur()" maxlength="200" onchange="this.value=this.value.substring(0, 200)" onkeydown="this.value=this.value.substring(0, 200)" onkeyup="this.value=this.value.substring(0, 200)"></textarea>
+              <textarea name="" id="" placeholder="费用明细" v-model="historyInfo.FixedContent" readonly="readonly" unselectable="on" onfocus="this.blur()" maxlength="200" onchange="this.value=this.value.substring(0, 200)" onkeydown="this.value=this.value.substring(0, 200)" onkeyup="this.value=this.value.substring(0, 200)"></textarea>
             </div>
             <div class="input input1">
               <span>扣点形式<i>*</i></span>
               <div>
                 <span>卖价倒扣了</span>
-                <input class="kouDian" type="number" placeholder="请输入" v-model="discount" readonly="readonly" unselectable="on" onfocus="this.blur()">
+                <input class="kouDian" type="number" placeholder="扣点" v-model="historyInfo.BucklePoint" readonly="readonly" unselectable="on" onfocus="this.blur()">
                 <span>个点</span>
               </div>
 
@@ -142,18 +142,18 @@
             <div class="jiLi">
               <div class="inputTitle">
                 <span>激励性返利<i>*</i></span>
-                <span v-if='this.me_checked'>有</span>
-                <span v-if='!this.me_checked'>否</span>
+                <span v-if='historyInfo.IsRebate'>有</span>
+                <span v-if='!historyInfo.IsRebate'>否</span>
 
               </div>
-              <ul class="jiList"  v-if='me_checked'>
-                  <li v-for='(item,index) in jilic' :key='index'>
+              <ul class="jiList"  v-if='historyInfo.IsRebate'>
+                  <li v-for='(item,index) in list' :key='index'>
                     <div>
                       <span>年销售</span>
-                      <input class="kouDian" type="number" placeholder="请输入" v-model='item.SalePrice'  readonly="readonly" unselectable="on" onfocus="this.blur()">
+                      <input class="kouDian" type="number" placeholder="年销售" v-model='item.SalePrice'  readonly="readonly" unselectable="on" onfocus="this.blur()">
                       <span>万,</span>
                       <span>返利</span>
-                      <input class="kouDian" type="number" placeholder="请输入" v-model='item.BucklePoint'  readonly="readonly" unselectable="on" onfocus="this.blur()">
+                      <input class="kouDian" type="number" placeholder="返利" v-model='item.BucklePoint'  readonly="readonly" unselectable="on" onfocus="this.blur()">
                       <span>个点</span>
                     </div>
                   </li>
@@ -163,7 +163,7 @@
         </div>
       </div>
     </div>
-    <router-link to="javascript:;" id="button" @click="commit">提交申请</router-link>
+    <a href="javascript:;" id="button" @click="commit">提交申请</a>
     <router-link to="/renewalDetail" id="button" class="cancel">取消</router-link>
   </div>
 </template>
@@ -240,42 +240,38 @@
           SalePrice: '',
           BucklePoint: ''
         }],
-        reExplain:''
+        reExplain:'',
+        info:{},
+        historyInfo:{}
       }
     },
    
     mounted () {
-    this.dateSegmentPicker = this.$createSegmentPicker({
-      data: dateSegmentData,
-      onSelect: (selectedDates, selectedVals, selectedTexts) => {
-        this.startDate=selectedTexts[0].join('-')
-        this.endDate=selectedTexts[1].join('-')
-        console.log(this.startDate) 
-      },
-      onNext: (i, selectedDate, selectedValue, selectedText) => {
-        dateSegmentData[1].min = selectedDate
-        if (i === 0) {
-          this.dateSegmentPicker.$updateProps({
-            data: dateSegmentData
-          })
+      this.dateSegmentPicker = this.$createSegmentPicker({
+        data: dateSegmentData,
+        onSelect: (selectedDates, selectedVals, selectedTexts) => {
+          this.startDate=selectedTexts[0].join('-')
+          this.endDate=selectedTexts[1].join('-')
+          console.log(this.startDate) 
+        },
+        onNext: (i, selectedDate, selectedValue, selectedText) => {
+          dateSegmentData[1].min = selectedDate
+          if (i === 0) {
+            this.dateSegmentPicker.$updateProps({
+              data: dateSegmentData
+            })
+          }
         }
-      }
-    })
-  },
+      })
+    },
     created() {
-      this.ID = this.$route.query.id
-
-      this.lookStyle = this.$route.query.lookStyle
-      if (this.lookStyle == 2) {
-        this.gitInfo()
-      }
-
+      this.info = JSON.parse(sessionStorage.getItem('_info'))
+      this.gitInfo()
     },
     methods: {
       showDateSegmentPicker() {
       this.dateSegmentPicker.show()
-    },
-     
+      },
       gitInfo() {
         this.axiosloading()
         axios({
@@ -284,21 +280,12 @@
             data: qs.stringify({
               UserId: getCookie('UserId'),
               token: getCookie('token'),
-              Id: this.ID
+              Id: this.info._companyId
             })
           })
           .then(res => {
             if (res.data.Status === 1) {
-              this.startDate = res.data.Data.CoopStartDate
-              this.endDate = res.data.Data.CoopEndDate
-              this.estimate = res.data.Data.SalePrice
-              this.slotAll = res.data.Data.DoorMoney
-              this.activities = res.data.Data.ActivityFee
-              this.price = res.data.Data.FixedFee
-              this.discount = res.data.Data.BucklePoint
-              this.me_checked = res.data.Data.IsRebate
-              this.explain = res.data.Data.FixedContent
-              this.jilic = res.data.Data.list
+              this.historyInfo = res.data.Data
             } else if (res.data.Status < 0) {
               this.getToast("登录失效，请重新登录", 'warn')
               setTimeout(() => {
@@ -370,12 +357,12 @@
         }else {
           this.axiosloading()
           axios({
-              url: this.getHost() + '/Company/ApplyAuthSave',
+              url: this.getHost() + '/Company/RenewApplyAuthSave',
               method: 'post',
               data: qs.stringify({
                 UserId: getCookie('UserId'),
                 token: getCookie('token'),
-                CompanyID: this.ID,
+                CompanyID: this.info._companyId,
                 FixedCharge: this.price,
                 BucklePoint: this.discount,
                 list: this.jilib,
@@ -387,6 +374,7 @@
                 FixedFee: this.price,
                 FixedContent: this.explain,
                 IsRebate: this.me_checked,
+                Remark:this.reExplain
               })
             })
             .then(res => {
@@ -396,10 +384,9 @@
                   this.$router.push({
                     path: '/companyDetail',
                     query: {
-                      id: this.ID
+                      id: this.info._companyId
                     }
                   })
-
                 }, 2000);
               } else if (res.data.Status < 0) {
                 this.getToast("登录失效，请重新登录", 'warn')

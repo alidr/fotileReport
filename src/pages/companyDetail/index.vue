@@ -125,13 +125,13 @@
               <p class="handleExtend flex" @click="handleInfoExtend(slide,index)">{{infoExtendWord}}</p>
             </div>
           </swiper-slide>
-          <swiper-slide v-if="this.swiperRe.Status !== ''">
-            <div class="followInfo followInfoBanner applyRenewal flex height">
+          <swiper-slide v-if="swiperRe.Status !== ''">
+            <div class="followInfo followInfoBanner applyRenewal flex height" @click="linkDetail(swiperRe.RenewId)">
               <p class="flex" style="margin-top:20px;">
-                <img src="./add.png" alt="" v-if="this.swiperRe.Status === '-2'">
+                <img src="./add.png" alt="" v-if="swiperRe.Status === '-2'">
                 <span>{{swiperReWord}}</span>
               </p>
-              <button v-if="this.swiperRe.Status !== '-2'">查看详情</button>
+              <button v-if="swiperRe.Status !== '-2'">查看详情</button>
             </div>
           </swiper-slide>
         </swiper>
@@ -458,7 +458,7 @@
 
     },
     created() {
-
+      sessionStorage.removeItem('_info')
       localStorage.removeItem("companyId")
       this.stylePlay = this.$route.query.stylePlay || ""
       this.ID = this.$route.query.id
@@ -490,6 +490,19 @@
     },
     
     methods: {
+      linkDetail(id) {
+        if (this.swiperRe.Status === '-2' ) {
+          const _info = {
+            '_companyName':this.data.Name,
+            '_UName':this.data.UName,
+            '_companyId': this.ID
+          }
+          sessionStorage.setItem('_info',JSON.stringify(_info))
+          this.$router.push({path:'/applyRenewal'})
+        }else{
+          this.$router.push({path:'/renewalDetail',query:{reId:id,companyId:this.ID}})
+        }
+      },
       getCompanyContractList(id) {
         axios({
             url: this.getHost() + '/Company/CompanyContractListById',
@@ -504,8 +517,16 @@
           if (res.data.Status === 1) {
             this.swiperSlides = res.data.Data.list
             this.swiperRe = res.data.Data.model
+          } else if (res.data.Status < 0) {
+            this.getToast("登录失效，请重新登录", 'warn')
+            setTimeout(() => {
+              this.delCookie("UserId")
+              this.delCookie("token")
+              this.setAccessId('')
+              location.replace('/')
+            }, 2000);
           } else {
-            alert(res.data.Message)
+            this.getToast(res.data.Message, 'warn')
           }
         })
         .catch(err => {
