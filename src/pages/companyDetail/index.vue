@@ -14,6 +14,7 @@
               <p class="person">业务员<span>{{data.UName}}</span></p>
               <p class="spanText">归属类型<span>{{data.TypeName}}</span></p>
             </div>
+
           </div>
           <div class="topIcon">
             <span @click="showMask(true)" v-if="edit">
@@ -257,7 +258,16 @@
         </div>
       </div>
     </div>
-   
+    <!-- <div class="swiperMask" v-if='ImgMaskH'>
+      <i @click.stop="imgMask" class="closeSwiper">
+        <img src="./close.png" alt="">
+      </i>
+      <swiper :options="swiperOption" ref="mySwiper">
+        <div class="swiper-slide games" v-for='(t,index) in imgArr' :key='index'>
+          <img :src="getImgHost()+t" alt="" v-gallery="'groupName'">
+        </div>
+      </swiper>
+    </div> -->
   </div>
 </template>
 <script>
@@ -274,7 +284,6 @@
   export default {
     data() {
       return {
-        timeLineImg:[],
         freeBtn: false,
         applyqy: true, //签约凭证
         swiperOption: {
@@ -365,7 +374,8 @@
         ExpenseVoucherList: '', //费用凭证
         imgs: [],
         imgMaskArrHT: [],
-        imgMaskArrPZ:[]
+        imgMaskArrPZ:[],
+        timeLineImg:[],
 
       }
 
@@ -634,6 +644,7 @@
                   this.btn4Active = true
                   this.applyqy = false
                   this.applyhe = false
+                  console.log(this.data.Status)
                   if (this.data.ExpenseVoucherList == '' || this.data.ExpenseVoucherList == null) {
                     this.applyqy = true
                     this.btn4Active = true
@@ -744,8 +755,6 @@
           .then(res => {
             if (res.data.Status === 1) {
               this.timeList = res.data.Data.list
-              console.log(this.timeList)
-
             } else if (res.data.Status < 0) {
               this.delCookie("UserId")
               this.delCookie("token")
@@ -841,15 +850,6 @@
           }
         })
       },
-      getImg(src) {
-        this.$createImagePreview().remove()
-        this.src = [this.getImgHost() + src]
-        this.$createImagePreview({
-          imgs: this.src,
-          zIndex:10000,
-          preventDefault:false
-        }).show()
-      },
       getTimeImg(src){
         this.$createImagePreview().remove()
         this.imgArr = src.split(',')
@@ -862,6 +862,16 @@
         });
         this.$createImagePreview({
           imgs: this.timeLineImg,
+          zIndex:10000,
+          preventDefault:false
+        }).show()
+      },
+      getImg(src) {
+        this.$createImagePreview().remove()
+        this.src = [this.getImgHost() + src]
+        console.log(this.src)
+        this.$createImagePreview({
+          imgs: this.src,
           zIndex:10000,
           preventDefault:false
         }).show()
@@ -1087,7 +1097,8 @@
       ...mapMutations({
         setAccessId: 'SET_ACCESSID'
       }),
-    }
+    },
+
   }
 
 </script>

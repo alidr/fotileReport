@@ -10,13 +10,17 @@
        <input type="text" placeholder="请输入家装公司简称" v-model="companyEasyName">
      </div>
      <div class="input" @click="showPicker">
-       <span>公司所在地<i>*</i></span>
+       <span>省市区<i>*</i></span>
        <input type="text" placeholder="省市区" v-model="area" readonly='readonly'>
        <i class="arrow"></i>
      </div>
      <div class="input">
-       <span>详细地址<i>*</i></span>
-       <input type="text" placeholder="请输入公司详细地址" v-model="detailArea">
+      <span>公司地址<i>*</i></span>
+      <input type="text" placeholder="请输入公司地址" v-model="detailArea">
+    </div>
+     <div class="input">
+       <span>门牌号</span>
+       <input type="text" placeholder="请输入门牌号，例302室" v-model="HouseNumber">
      </div>
       <div class="input">
         <span>公司联系人姓名</span>
@@ -87,6 +91,7 @@ export default {
       comPersonJob:'',
       comPersonTel:'',
       comPersonArea:'',
+      HouseNumber:'',
       other:'',
       areaId:'',
       image: '',
@@ -174,6 +179,7 @@ export default {
             ShortName:this.companyEasyName,
             Area:this.areaId,
             Address:this.detailArea,
+            HouseNumber:this.HouseNumber,
             Status:0,
             UserName:this.companyPerson,
             JobName:this.comPersonJob,

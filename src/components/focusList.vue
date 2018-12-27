@@ -1,24 +1,28 @@
 <template>
     <div>
       <div class="contentList" v-for="(item,index) in list" :key="index" @click="jump(item.ID)">
-        <div class="contentListTop">
-          <p class="firstLine">
-            <span :class="{red:item.Status==2,yellow:item.Status==1,grey:item.Status==3}">{{item.StatusName}}</span>
-            <span v-if="item.Status!=3">剩余保护期:{{item.EndDate}}天</span>
-            <span v-if="item.Status==3">合同剩余时间:{{item.EndTime}}天</span>
-          </p>
-          <p class="twoLine">
-            <span>{{item.Name}}</span>
-            <span @click.stop="action(item.ID,'home')" v-if="Action">+行动</span>
-          </p>
-          <i v-if="item.IsEmphasis||IsEmphasis"></i>
-        </div>
-        <div class="contentListBottom">
-          <span v-if="!item.CreateDate==''">{{item.CreateDate}}</span>
-          <span v-if="!item.CreateDate==''">{{item.Content}}</span>
-          <span v-if="!item.CreateDate==''">{{item.UserName}}</span>
-          <span v-if="item.CreateDate==''">暂无跟单信息</span>
-        </div>
+          <div class="contentListTop">
+              <p class="firstLine">
+                <span :class="{qiaTan:item.Status==1,qianYue:item.Status==2,qianYued:item.Status==3,fangQi:item.Status==-1,xinJian:item.Status==0,guoQi:item.Status==-3}">{{item.StatusName}}</span>
+                <span v-if="item.Status!=3">剩余保护期:{{item.EndDate}}天</span>
+                <span v-if="item.Status==3">合同剩余时间:{{item.EndTime}}天</span>
+              </p>
+              <p class="twoLine">
+                <a href="javascript:;" class="round" :class="{'active':checkBoxs[index]}" @click.stop="check(index,item.ID)"><b
+                    :class="{'active':checkBoxs[index]}"></b></a>
+                    <!-- 公司评级 -->
+                    <!-- <a href="javascript:;"  class="bigIcon"><span class="smallIcon"><b>B+</b></span></a> -->
+                <a href="javascript:;" class="name">{{item.Name}}</a>
+              </p>
+              <p class="downLine"><span class="zuZhi">{{item.SalesManName}}</span><b>({{item.Organization}})</b></span><span class="address">{{item.Address}}</span></p>
+              <i v-if="item.IsEmphasis||IsEmphasis"></i>
+            </div>
+            <div class="contentListBottom">
+                <i v-if="!item.CreateDate==''">{{item.CreateDate}}</i>
+              <p v-if="!item.CreateDate==''">{{item.Content}}</p>
+              <b v-if="!item.CreateDate==''">{{item.UserName}}</b>
+              <i v-if="item.CreateDate==''">暂无跟单消息</i>
+            </div>
       </div>
     </div> 
 </template>
@@ -29,7 +33,8 @@ export default {
   props:["list","Action","IsEmphasis"],
   data(){
     return{
-      emptyInfo:false
+      emptyInfo:false,
+      checkBoxs:[],
     }
   },
   created(){
@@ -75,17 +80,19 @@ export default {
 .firstLine span{
   margin-left: 14px;
 }
-.red{
-  background-color: #FBC1B4;
-  color: #F26F53
+.downLine{
+padding: 0;
 }
-.yellow{
-  background-color: #F6EAD4;
-  color: #BB9F61;
+.contentListTop{
+  padding-bottom: 10px
 }
-.grey{
-  background-color: #ccc;
-  color: #fff
+.contentListTop i{
+  position: absolute;
+    top: 0;
+    left: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px 3px;
 }
 </style>
 

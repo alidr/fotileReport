@@ -109,7 +109,8 @@ export default [ {
     path: '/CompanyFollow',
     component: CompanyFollow,
     meta: {
-      title: '组员跟进列表'
+      title: '组员跟进列表',
+      keepAlive:true
     },
   },
   {

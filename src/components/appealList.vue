@@ -151,6 +151,12 @@ export default {
 /* 最新申诉 */
 .firstLine .status{
   background-color: #fff !important;
+  padding: 5px 10px !important;
+    border-radius: 4px !important;
+    top: 15px !important;
+}
+.twoLine{
+  padding-top: 20px;
 }
 .twoLine.twoLineInfo span:nth-child(1){
   font-size: 16px;
@@ -164,15 +170,15 @@ export default {
 }
 .red{
   border:1px solid #F26F53;
-  color: #F26F53
+  color: #F26F53 !important;
 }
 .yellow{
   border:1px solid #BB9F61;
-  color: #BB9F61;
+  color: #BB9F61 !important;
 }
 .grey{
   border:1px solid #BFBFBF;
-  color:  #BFBFBF;
+  color:  #BFBFBF !important;
 }
 </style>
 

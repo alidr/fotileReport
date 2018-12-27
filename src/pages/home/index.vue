@@ -191,7 +191,6 @@
             })
           })
           .then(res => {
-            console.log(res)
             if (res.data.Status === 1) {
               this.msgList = res.data.Data
             } else if (res.data.Status < 0) {
@@ -219,10 +218,8 @@
             })
           })
           .then(res => {
-            console.log(res)
             if (res.data.Status === 1) {
               this.oneAnnounce = res.data.Data
-              console.log(this.oneAnnounce)
 
             } else if (res.data.Status < 0) {
               this.getToast("登录失效，请重新登录", 'warn')
@@ -250,7 +247,6 @@
             })
           })
           .then(res => {
-            console.log(res)
             if (res.data.Status === 1) {
               this.List = res.data.Data.list
             } else if (res.data.Status < 0) {
@@ -276,7 +272,6 @@
             })
           })
           .then(res => {
-            console.log(res)
             if (res.data.Status === 1) {
               this.applyList = res.data.Data.list
             } else if (res.data.Status < 0) {

@@ -1,10 +1,16 @@
 <template>
   <div id="app">
-    <a href="javascript:;" @click="back" id="fixBack" v-show="needBack&&isminprograme">
+    <a href="javascript:;" @click="back" id="fixBack" v-show="needBack">
       <!-- <i class="iconfont icon-fanhui"></i> -->
+      <!-- v-show="needBack&&isminprograme" -->
       <span>返回</span>
     </a>
-    <router-view />
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive">
+      </router-view>
+  </keep-alive>
+  
+    <router-view v-if="!$route.meta.keepAlive"/>
   </div>
 </template>
 
@@ -96,7 +102,7 @@
 <style>
   #app {
     font-size: 14px;
-    height: 100%;
+    height: 100vh;
   }
 
   #uploadContract .cube-upload .cube-upload-file,
@@ -129,7 +135,7 @@
     width: 50px;
     height: 40px;
     background-color: rgba(0, 0, 0, .3);
-    z-index: 999999;
+    z-index: 999;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -224,8 +230,14 @@
 .saleWarp .cube-scroll-content{
     z-index: 300 !important;
   }
+  
   .cube-image-preview-item .cube-image-preview-img{
-    width: 80% !important;
     margin: 0 auto;
+    max-width: 80% !important;
+    border-radius:12px !important;
+
+  }
+  .saleWarp .cube-scroll-wrapper{
+    background: white;
   }
 </style>

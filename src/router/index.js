@@ -55,7 +55,8 @@ let router = new Router({
       path: '/companyList',
       component: CompanyList,
       meta: {
-        title: '家装公司列表'
+        title: '家装公司列表',
+        keepAlive:true
       }
     }, {
       path: '/companyDetail',
@@ -94,7 +95,8 @@ let router = new Router({
       path: '/messageCenter',
       component: MessageCenter,
       meta: {
-        title: '消息中心'
+        title: '消息中心',
+        keepAlive:true
       }
     }, {
       path: '/appealDetails',

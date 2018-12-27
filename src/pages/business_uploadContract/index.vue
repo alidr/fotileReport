@@ -293,12 +293,13 @@
               setTimeout(() => {
                 this.isDisable = false
                 this.loading = false
-                this.$router.push({
+                this.$router.replace({
                   path: '/companyDetail',
                   query: {
                     id: this.CompanyID
                   }
                 })
+                this.$router.go(-1)
               }, 2000);
             } else if (res.data.Status < 0) {
               this.delCookie("UserId")
@@ -327,12 +328,13 @@
               setTimeout(() => {
                 this.isDisable = false
                 this.loading = false
-                this.$router.push({
+                this.$router.replace({
                   path: '/companyDetail',
                   query: {
                     id: this.CompanyID
                   }
                 })
+                this.$router.go(-1)
               }, 2000);
             } else if (res.data.Status < 0) {
               this.delCookie("UserId")
@@ -361,12 +363,13 @@
               setTimeout(() => {
                 this.isDisable = false
                 this.loading = false
-                this.$router.push({
+                this.$router.replace({
                   path: '/companyDetail',
                   query: {
                     id: this.CompanyID
                   }
                 })
+                this.$router.go(-1)
               }, 2000);
             } else if (res.data.Status < 0) {
               this.delCookie("UserId")
@@ -398,12 +401,13 @@
                 setTimeout(() => {
                   this.isDisable = false
                   this.loading = false
-                  this.$router.push({
+                  this.$router.replace({
                     path: '/companyDetail',
                     query: {
                       id: this.CompanyID
                     }
                   })
+                  this.$router.go(-1)
                 }, 2000);
               } else if (res.data.Status < 0) {
                 this.delCookie("UserId")
@@ -437,12 +441,13 @@
                 setTimeout(() => {
                   this.isDisable = false
                   this.loading = false
-                  this.$router.push({
+                  this.$router.replace({
                     path: '/companyDetail',
                     query: {
                       id: this.CompanyID
                     }
                   })
+                  this.$router.go(-1)
                 }, 2000);
               } else if (res.data.Status < 0) {
                 this.delCookie("UserId")
@@ -462,12 +467,13 @@
         }
       },
       cancel() {
-        this.$router.push({
+        this.$router.replace({
           path: '/companyDetail',
           query: {
             id: this.CompanyID
           }
         })
+        this.$router.go(-1)
       },
       onFileChange: function (e) {
         var dom = e.currentTarget;

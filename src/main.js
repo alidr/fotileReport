@@ -7,7 +7,6 @@ import store from './store'
 import './common/common.css';
 import Cube from 'cube-ui';
 Vue.use(Cube)
-
 import cookie from './utils/cookie.js'
 Vue.use(cookie);
 

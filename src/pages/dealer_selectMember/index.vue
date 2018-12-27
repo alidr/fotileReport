@@ -118,9 +118,10 @@ export default {
       }
       this.setDealerSelectedMember(list)
       this.isMemberSelect()
-      this.$router.push({
+      this.$router.replace({
         path:"/newGroup"
         })
+        this.$router.go(-1)
       // if (!this.isActive[index]) {
       //   this.idList.push(item)
       //   localStorage.setItem("select",JSON.stringify(this.idList))

@@ -344,5 +344,13 @@ export default {
   border:1px solid #BFBFBF;
   color:  #BFBFBF;
 }
-
+.firstLine .status{
+  padding: 5px 10px !important;
+    border-radius: 4px !important;
+    top: 13px !important;
+    color: #BB9F61 !important;
+}
+.twoLine{
+  padding-top: 16px !important;
+}
 </style>
