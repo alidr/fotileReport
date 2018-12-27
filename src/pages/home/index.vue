@@ -40,6 +40,7 @@
         <router-link to="/appealHome" href="javascript:;" class="appeal" v-if="action">我要申诉</router-link>
       </div>
     </div>
+    <router-link to='/applyRenewal'>申请续签</router-link>
     <!-- 最新公告 -->
     <div class="home_newAnnounce">
       <i></i>

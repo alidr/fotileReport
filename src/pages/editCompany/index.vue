@@ -3,7 +3,7 @@
     <div class="companyInfo">
       <div class="input">
         <span>公司类型</span>
-        <input type="text" placeholder="请选择" readonly="readonly" unselectable="on" onfocus="this.blur()":value="data.CategoryName">
+        <input type="text" placeholder="请选择" readonly="readonly" unselectable="on" onfocus="this.blur()" :value="data.CategoryName">
       </div>
       <div class="input" @click="showAscType">
         <span>归属类型<i>*</i></span>
