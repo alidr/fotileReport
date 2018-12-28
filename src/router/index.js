@@ -15,8 +15,10 @@ import AppealDetails from "@/pages/manager_appealDetails"
 import Announce from "@/pages/Announce"
 import ApprovalRecord from "@/pages/busniess_ApprovalRecord";
 import CompanyRetrieval from "@/pages/CompanyRetrieval";
+import renewalDetail from '@/pages/renewalDetail_business';
 import test from "@/pages/test";
 import wx from "@/pages/wx";
+
 
 Vue.use(Router)
 // const Home = () => import ('@/pages/home')
@@ -110,6 +112,13 @@ let router = new Router({
       component: ApprovalRecord,
       meta: {
         title: '审批记录'
+      },
+    },
+    {
+      path: '/renewalDetail',
+      component: renewalDetail,
+      meta: {
+        title: '申请续签详情'
       },
     },
     {

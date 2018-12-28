@@ -118,15 +118,15 @@
                 <span class="round" :class="{'active':btn4Active}"><i :class="{'active':btn4Active}">4</i></span>
                 <span class="statusDetail" :class="{'active':btn4Active}">上传签约凭证</span>
                 </a>
-                <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" @click="uploadContract(4)" v-if='applyqy'>上传费用凭证</a>
-                <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" v-if='freeBtn'>上传费用凭证</a>
-                <a href="javascript:;" class="applyBtn active" v-if="!applyqy&&!freeBtn" @click="showImagePreviewPZ(slide.ExpenseVoucherList)">查看费用凭证</a>
-                <span class="applyStatus active" v-if="reApplyqy" @click="uploadContract(4)">编辑上传</span>
+                <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" @click="uploadContract(4,slide.ID)" v-if="slide.Status == 3&&slide.ExpenseVoucherList==''&&AccessId==5">上传费用凭证</a>
+                <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" v-if="slide.Status == 3&&slide.ExpenseVoucherList==''&&AccessId!==5">上传费用凭证</a>
+                <a href="javascript:;" class="applyBtn active" v-if="slide.ExpenseVoucherList!==''" @click="showImagePreviewPZ(slide.ExpenseVoucherList)">查看费用凭证</a>
+                <span class="applyStatus active" v-if="slide.Status == 3&&slide.ExpenseVoucherList!==''&&AccessId==5" @click="uploadContract(4,slide.ID)">编辑上传</span>
               </p>
               <p class="handleExtend flex" @click="handleInfoExtend(slide,index)">{{infoExtendWord}}</p>
             </div>
           </swiper-slide>
-          <swiper-slide v-if="swiperRe.Status !== ''">
+          <swiper-slide v-if="swiperRe.Status !== ''||(swiperRe.Status === '-2'&&AccessId!=5)">
             <div class="followInfo followInfoBanner applyRenewal flex height" @click="linkDetail(swiperRe.RenewId)">
               <p class="flex" style="margin-top:20px;">
                 <img src="./add.png" alt="" v-if="swiperRe.Status === '-2'">
@@ -1138,14 +1138,24 @@
       //上传合同
       //1授权书
       //2合同
-      uploadContract(num) {
+      uploadContract(num,reId) {
+        let params = {}
+        if (num == 4) {
+          params = {
+            id: this.ID,
+            style: num,
+            reId: reId
+          }
+        }else{
+          params = {
+            id: this.ID,
+            style: num
+          }
+        }
         if (this.btn3Active || this.btn2Active || this.btn4Active) {
           this.$router.push({
             path: '/uploadContract',
-            query: {
-              id: this.ID,
-              style: num
-            }
+            query: params
           })
         }
       },
