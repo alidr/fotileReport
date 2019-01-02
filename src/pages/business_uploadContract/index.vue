@@ -161,7 +161,7 @@
           <i @click="deleteImg(item,index)" class="close">X</i>
           <img :src="getImgHost()+item.ImageUrl" alt="" :data-ID='item.ID'>
         </div>
-        <div v-for="(t,i) in newImgUrl" :key='i' class="imgList" v-if="newImgUrl.length>0">
+        <div v-for="(t,i) in newImgUrl" :key="'new'+i" class="imgList" v-if="newImgUrl.length>0">
           <i @click="deleteNewImg(t,i)" class="close">X</i>
           <img :src="t" alt="">
         </div>
@@ -231,11 +231,13 @@
         imgLen: '',
         newImgLen: '',
         base64Img: '',
-        textNum: 0
+        textNum: 0,
+        reId:''
       }
     },
 
     created() {
+      this.reId = this.$route.query.reId
       this.CompanyID = this.$route.query.id
       this.obtainImg()
       this.style = this.$route.query.style
@@ -393,6 +395,7 @@
                 token: getCookie('token'),
                 ImageId: this.delImgArr,
                 CompanyID: this.CompanyID,
+                ContractID:this.reId
               })
             }).then(res => {
               if (res.data.Status === 1) {
@@ -431,7 +434,8 @@
                 UserId: getCookie('UserId'),
                 token: getCookie('token'),
                 CompanyID: this.CompanyID,
-                ImageUrl: this.newImgUrl
+                ImageUrl: this.newImgUrl,
+                ContractID:this.reId
               })
             }).then(res => {
               if (res.data.Status === 1) {
@@ -502,7 +506,7 @@
           data: qs.stringify({
             UserId: getCookie('UserId'),
             token: getCookie('token'),
-            Id: this.CompanyID
+            Id: this.reId
           })
         }).then(res => {
           this.ImageUrl = res.data.Data

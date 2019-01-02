@@ -71,6 +71,76 @@
         </div>
 
       </div>
+<<<<<<< HEAD
+=======
+      <!-- 卡片 -->
+     <div class="cube">
+        <swiper :options="swiperOption">
+          <swiper-slide v-for="(slide,index) in swiperSlides" :key="index" :class="{'swiper-no-swiping':infoExtend !== -1}">
+            <div class="followInfo followInfoBanner" :class="{marginLeft7:index===0,marginLeft5:index!==0,height:infoExtend == -1}">
+              <div class="followDays">
+                <p v-if="slide.Status === 1 || slide.Status === 2">当前已跟进<span>{{slide.NowFollowDay}}</span>/{{slide.FollowDay}}天</p>
+                <p v-if="slide.Status === 3">合同剩余时间<span>{{slide.EndTime}}</span>天</p>
+                <p v-if="slide.Status === -3">历史合同<span style="font-size:10px;">（{{slide.CoopStartDate}} ~ {{slide.CoopEndDate}}）</span></p>
+                <a href="javascript:;" @click="approvalRecord(ID)">审批记录>></a>
+              </div>
+              <p class="uploadAuthorized" v-if="btnActive || (infoExtend == index)">
+                <a class='flex'>
+                  <span class="round" :class="{'active':btnActive}">
+                    <i :class="{'active':btnActive}">1</i></span>
+                <span class="statusDetail" :class="{'active':btnActive}">互有意向，申请授权</span>
+                </a>
+                <a href="javascript:;" class="applyBtn" :class="{'active':btnActive}" v-if="applyshou" @click="applyAuthorized(1)">申请授权</a>
+                <a href="javascript:;" class="applyBtn active" v-if="!applyshou" @click="applyAuthorized(2)">查看授权凭证</a>
+                <!-- <span class="applyStatus active" >审核通过</span> -->
+              </p>
+              <span class="line" v-if="infoExtend == index"></span>
+              <p class="uploadContract" v-if="btn2Active || (infoExtend ==index)">
+                <a class='flex'>
+                <span class="round" :class="{'active':btn2Active}"><i :class="{'active':btn2Active}">2</i></span>
+                <span class="statusDetail" :class="{'active':btn2Active}">授权书照片</span>
+                </a>
+                <a href="javascript:;" class="applyBtn" :class="{'active':btn2Active}" v-if="applyshu" @click="btn2Active && uploadContract(1)">上传授权书</a>
+                <a href="javascript:;" class="applyBtn active" v-if="!applyshu" @click="getImg(slide.AuthBookImage)">查看授权书</a>
+                <span class="applyStatus active" v-if="reApplyshu" @click="uploadContract(1)">重新上传</span>
+              </p>
+              <span class="line" v-if="infoExtend == index"></span>
+              <p class="applyAuthorized" v-if="btn3Active || (infoExtend == index)">
+                <a class='flex'>
+                <span class="round" :class="{'active':btn3Active}"><i :class="{'active':btn3Active}">3</i></span>
+                <span class="statusDetail" :class="{'active':btn3Active}">签约成功，上传合同</span>
+                </a>
+                <a href="javascript:;" class="applyBtn" :class="{'active':btn3Active}" v-if="applyhe" @click="uploadContract(2)">上传签约合同</a>
+                <a href="javascript:;" class="applyBtn" :class="{'active':btn3Active}" v-if="applquyu">上传签约合同</a>
+                <a href="javascript:;" class="applyBtn active" v-if="!applyhe&&!applquyu" @click="showImagePreviewHT(slide.ContractImage)">查看合同</a>
+              </p>
+              <span class="line" v-if="infoExtend == index"></span>
+              <p class="uploadContract" v-if="btn4Active || (infoExtend == index)">
+                <a class='flex'>
+                <span class="round" :class="{'active':btn4Active}"><i :class="{'active':btn4Active}">4</i></span>
+                <span class="statusDetail" :class="{'active':btn4Active}">上传签约凭证</span>
+                </a>
+                <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" @click="uploadContract(4,slide.ID)" v-if="slide.Status == 3&&slide.ExpenseVoucherList==''&&AccessId==5">上传费用凭证</a>
+                <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" v-if="slide.Status == 3&&slide.ExpenseVoucherList==''&&AccessId!==5">上传费用凭证</a>
+                <a href="javascript:;" class="applyBtn active" v-if="slide.ExpenseVoucherList!==''" @click="showImagePreviewPZ(slide.ExpenseVoucherList)">查看费用凭证</a>
+                <span class="applyStatus active" v-if="slide.Status == 3&&slide.ExpenseVoucherList!==''&&AccessId==5" @click="uploadContract(4,slide.ID)">编辑上传</span>
+              </p>
+              <p class="handleExtend flex" @click="handleInfoExtend(slide,index)">{{infoExtendWord}}</p>
+            </div>
+          </swiper-slide>
+          <swiper-slide v-if="swiperRe.Status !== ''||(swiperRe.Status === '-2'&&AccessId!=5)">
+            <div class="followInfo followInfoBanner applyRenewal flex height" @click="linkDetail(swiperRe.RenewId)">
+              <p class="flex" style="margin-top:20px;">
+                <img src="./add.png" alt="" v-if="swiperRe.Status === '-2'">
+                <span>{{swiperReWord}}</span>
+              </p>
+              <button v-if="swiperRe.Status !== '-2'">查看详情</button>
+            </div>
+          </swiper-slide>
+        </swiper>
+     </div>
+      <!-- <router-link to='/test'>测试</router-link> -->
+>>>>>>> 9b735c369fceb057b409ce907d002b433517ab43
       <!-- 跟进信息 -->
       <div class="followInfo">
         <div class="followDays">
@@ -381,7 +451,7 @@
 
     },
     created() {
-
+      sessionStorage.removeItem('_info')
       localStorage.removeItem("companyId")
       this.stylePlay = this.$route.query.stylePlay || ""
       this.ID = this.$route.query.id
@@ -403,6 +473,64 @@
     },
     
     methods: {
+<<<<<<< HEAD
+=======
+      linkDetail(id) {
+        if (this.swiperRe.Status === '-2' ) {
+          const _info = {
+            '_companyName':this.data.Name,
+            '_UName':this.data.UName,
+            '_companyId': this.ID
+          }
+          sessionStorage.setItem('_info',JSON.stringify(_info))
+          this.$router.push({path:'/applyRenewal'})
+        }else{
+          this.$router.push({path:'/renewalDetail',query:{reId:id,companyId:this.ID}})
+        }
+      },
+      getCompanyContractList(id) {
+        axios({
+            url: this.getHost() + '/Company/CompanyContractListById',
+            method: 'post',
+            data: qs.stringify({
+              UserId: getCookie('UserId'),
+              token: getCookie('token'),
+              Id: id
+            })
+          })
+        .then(res => {
+          if (res.data.Status === 1) {
+            this.swiperSlides = res.data.Data.list
+            this.swiperRe = res.data.Data.model
+          } else if (res.data.Status < 0) {
+            this.getToast("登录失效，请重新登录", 'warn')
+            setTimeout(() => {
+              this.delCookie("UserId")
+              this.delCookie("token")
+              this.setAccessId('')
+              location.replace('/')
+            }, 2000);
+          } else {
+            this.getToast(res.data.Message, 'warn')
+          }
+        })
+        .catch(err => {
+          alert(err)
+        })
+      },
+      handleInfoExtend(slide,index) {
+        if (this.infoExtend === index) {
+          this.infoExtend = -1
+          this.infoExtendWord = "展开"
+        }else{
+          this.infoExtend = index
+          this.infoExtendWord =  "收起"
+        }
+        if (this.infoExtend) {
+          this.slide = slide
+        }
+      },
+>>>>>>> 9b735c369fceb057b409ce907d002b433517ab43
       deleteSelect() {
         if (this.type == 1) {
           this.deleteTimeLine()
@@ -986,14 +1114,24 @@
       //上传合同
       //1授权书
       //2合同
-      uploadContract(num) {
+      uploadContract(num,reId) {
+        let params = {}
+        if (num == 4) {
+          params = {
+            id: this.ID,
+            style: num,
+            reId: reId
+          }
+        }else{
+          params = {
+            id: this.ID,
+            style: num
+          }
+        }
         if (this.btn3Active || this.btn2Active || this.btn4Active) {
           this.$router.push({
             path: '/uploadContract',
-            query: {
-              id: this.ID,
-              style: num
-            }
+            query: params
           })
         }
       },

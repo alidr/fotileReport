@@ -1,0 +1,650 @@
+ #mask .img {
+    width: 80%;
+  }
+
+  #mask .img img {
+    width: 100%;
+  }
+
+  .btn {
+    margin-top: 15px;
+  }
+
+  .title {
+    margin-bottom: 15px;
+  }
+
+  .otherInfo {
+    margin-top: 15px;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .otherInfo p {
+    margin-bottom: 10px;
+    height: 25px;
+  }
+
+  .basicInfoBottom .otherInfo p :nth-child(2) {
+    width: auto;
+  }
+
+  #companyDetail {
+    width: 100%;
+  }
+
+  /* 基础信息 */
+  .contetn {
+    box-sizing: border-box;
+  }
+
+  .basicInfo,
+  .followTime,
+  .competition,
+  .shopInfo {
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 0 10px 10px;
+    box-sizing: border-box;
+    margin: 0 15px 15px;
+  }  
+  .followInfo{
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 0 15px 10px;
+    box-sizing: border-box;
+  }
+  .marginLeft7{
+    margin-left: 7px;
+  }
+  .marginLeft5{
+    margin-left: 5px;
+  }
+  /* .followInfo.marginLeft{
+    margin: 0 15px;
+  } */
+  .applyRenewal{
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: #e2c78f;
+    font-size: 24px;
+    color: #fff;
+  }
+  .applyRenewal img{
+    width: 34px;
+    margin-right: 10px;
+  }
+  .applyRenewal button{
+    color: #fff;
+    font-size: 12px;
+    background-color: #e2c78f;
+    width: 135px;
+    border-radius: 16px;
+    height: 32px;
+    border: 1px solid #fff;
+  }
+  .basicInfoTop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #f0f0f0;
+    position: relative;
+  }
+
+  .basic {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 0;
+    flex: 1;
+
+  }
+
+  .status {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+
+  .status span:first-child {
+    padding: 0 10px;
+    background-color: #F6EAD4;
+    color: #BB9F61;
+    border-radius: 4px;
+    height: 20px;
+    display: inline-block;
+    line-height: 20px;
+  }
+
+  .status span:nth-child(2) {
+    font-size: 16px;
+    font-weight: 600;
+    margin-left: 5px;
+    width: 70%;
+    word-break: break-all;
+    line-height: 20px;
+  }
+
+  .person {
+    color: black;
+    font-size: 12px;
+    margin-right: 16px;
+  }
+
+  .person span {
+    color: #999999;
+    margin-left: 10px;
+  }
+
+  .topIcon {
+    /* width: 80px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 12px;
+    right: -10px;
+  }
+
+  .topIcon span {
+    flex: 1;
+  }
+
+  .topIcon span img {
+    width: 33px;
+  }
+
+  .basicInfoBottom {
+    margin-top: 15px;
+    font-size: 12px;
+    color: #666666;
+    min-height: 120px;
+  }
+
+  .basicInfoBottom p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  .basicInfoBottom p i img {
+    width: 16px;
+  }
+
+  .basicInfoBottom p i {
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .job {
+    margin-left: 35px;
+  }
+
+  .job img {
+    width: 12px !important;
+  }
+
+  .basicInfoBottom p span {
+    display: inline-block;
+    margin-right: 10px;
+
+  }
+
+  .basicInfoBottom p :nth-child(2) {
+    display: flex;
+    width: 60px;
+  }
+
+  .ImageBtn {
+    background-color: #ccc;
+    padding: 5px;
+    border-radius: 4px;
+    color: #fff
+  }
+
+  .ImageBtn.active {
+    background-color: rgba(226, 199, 143, 1);
+  }
+
+  .color {
+    color: rgb(83, 78, 78);
+  }
+
+  .color.active {
+    color: #FFFFFF;
+    padding: 0 20px;
+    line-height: 24px;
+    background: rgba(226, 199, 143, 1);
+    border-radius: 4px;
+  }
+
+  #expend {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  #expend span {
+    width: 0;
+    flex-grow: 1;
+    text-align: right;
+    color: #4d4d4d;
+    font-size: 12px;
+  }
+
+  /* 跟进信息 */
+  .followInfo {
+    padding-bottom: 15px;
+  }
+  .followInfoBanner{
+    width: calc(100vw - 30px);
+    box-sizing: border-box;
+    margin-bottom: 0;
+  }
+  .followInfoBanner.height{
+    height: 135px;
+  }
+  .cube .swiper-container{
+    margin: 0 !important;
+  }
+  .handleExtend{
+    justify-content: flex-end;
+    text-align: right;
+    font-size: 12px;
+    color: #D3D3D3;
+    margin-top: 15px;
+  }
+  .followDays {
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+  }
+
+  .followDays p {
+    width: 0;
+    flex-grow: 1;
+    font-size: 16px;
+    font-weight: 500;
+    color: #4d4d4d;
+    display: flex;
+    align-items: center;
+  }
+
+  .followDays p span {
+    font-size: 20px;
+    color: #BB9F61;
+  }
+
+  .followDays a {
+    color: #BB9F61;
+  }
+  .flex{
+    display: flex;
+    align-items: center;
+  }
+  .applyAuthorized,
+  .uploadAuthorized,
+  .uploadContract {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #ccc;
+  }
+
+  .round {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    border: 1px solid #CCC;
+    margin-right: 10px;
+  }
+
+  .round i {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    background-color: #ccc;
+    color: #fff;
+  }
+
+  .round.active {
+    border: 1px solid #BB9F61;
+  }
+
+  .round i.active {
+    background-color: #BB9F61;
+  }
+
+  .applyBtn {
+    width: 85px;
+    height: 30px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px;
+  }
+
+  .applyStatus {
+    width: 0;
+    flex-grow: 1;
+    text-align: right;
+  }
+
+  .line {
+    display: flex;
+    height: 32px;
+    width: 10px;
+    border-left: 1px dotted #ccc;
+    margin-left: 11px;
+  }
+
+  .applyBtn.active {
+    border: 1px solid #BB9F61;
+    color: #BB9F61;
+  }
+
+  .statusDetail {
+    width: 108px;
+  }
+
+  .statusDetail.active,
+  .applyStatus.active {
+    color: #666;
+  }
+
+  .applyStatus.active {
+    color: #9c9c9c;
+  }
+
+  /* 跟单时间线 */
+.followTime{
+  margin-top: 15px;
+}
+  .followTimeTop,
+  .competitionNum {
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .followTimeTop p {
+    width: 0;
+    flex-grow: 1;
+    color: #4d4d4d;
+  }
+
+  .followTimeTop p span {
+    font-size: 16px;
+  }
+
+  .followTimeTop p span:nth-child(2) {
+    float: right;
+  }
+
+  .followTimeDetail {
+    border: 1px solid #BB9F61;
+    margin-top: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .followTimeDetail .Date {
+    margin-bottom: 10px;
+    color: #666;
+    display: flex;
+    align-items: center;
+  }
+
+  .followTimeDetail .Date span:nth-child(2) {
+    width: 0;
+    flex-grow: 1;
+    margin-left: 5px;
+    font-weight: 600;
+  }
+
+  .followTimeDetail .Date i {
+    display: flex;
+    justify-content: center;
+  }
+
+  .followTimeDetail .Date i img {
+    width: 40px;
+    height: 27px;
+  }
+
+  .followTimeDetail .detail {
+    /* height: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; */
+    color: #999;
+    margin-bottom: 10px;
+  }
+
+  /* .timeLineImg{
+  display: flex;
+  justify-content: center;
+  align-items: center
+} */
+  .timeLineImg img {
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+  }
+
+  /* 竞品分析 */
+
+  .followDays .month {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    background-color: #F6EAD4;
+    border-radius: 4px;
+    padding: 0 10px;
+    height: 20px;
+    margin-left: 10px;
+  }
+
+  .competitionInfo {
+    display: flex;
+    padding: 10px;
+    border-top: 4px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .competitionInfo p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-grow: 1;
+    border-right: 1px solid #f0f0f0;
+  }
+
+  .competitionInfo p:last-child {
+    border: none;
+  }
+
+  .competitionInfo p span:nth-child(1) {
+    margin-bottom: 10px;
+    color: #808080;
+  }
+
+  .competitionInfo p span:nth-child(2) {
+    color: #000;
+  }
+
+  .competitionNum p {
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    color: #808080;
+  }
+
+  .competitionNum p span {
+    color: #000;
+  }
+
+  .competitionNum p:nth-child(1),
+  .competitionNum p:nth-child(2) {
+    border-right: 1px solid #f0f0f0;
+  }
+
+  #button {
+    background-image: none;
+    border: 1px solid #BB9F61;
+    color: #BB9F61;
+  }
+
+  /* 直营店信息 */
+  .shopInfo .followDays {
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .shopInfo .followDays span,
+  .followTimeTop span:nth-child(2) {
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+
+  .upload {
+    background-color: #ccc;
+
+    color: #fff;
+    margin-right: 10px;
+  }
+
+  .upload.noImg {
+    background-color: #E2C78F;
+  }
+
+  .reUpload {
+    color: #E2C78F;
+    border: 1px solid #E2C78F;
+  }
+
+  .ShopMsg {
+    height: 140px;
+    font-size: 28px;
+    color: #ccc;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  /* <div class="ShopDetailInfo">
+        <p>直营门店1<span>门店地门店地址门店地址址门店地址</span><i><img src="./delete.png" alt=""></i></p>
+        <p>直营门店2<span>门店地门店地址门店地址址门店地址</span> <i><img src="./delete.png" alt=""></i></p>
+      </div> */
+  .ShopDetailInfo p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+    height: 45px;
+  }
+
+  .ShopDetailInfo p span {
+    width: 0;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 10px;
+    color: #a7a7a7;
+  }
+
+  .ShopDetailInfo p i {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .ShopDetailInfo p img {
+    width: 40px;
+  }
+
+  .addShop {
+    justify-content: center;
+    border: none !important;
+  }
+
+  .infoNull {
+    color: #ccc;
+    font-size: 28px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    border-top: 4px solid #f0f0f0;
+  }
+
+  .swiperMask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+  }
+
+  .swiperMask img {
+    display: block;
+    width: 74%;
+    margin: 0 auto;
+  }
+
+  .closeSwiper {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 40px;
+    height: 4px;
+    z-index: 99;
+  }
+
+  .basicText {
+    display: flex;
+    font-size: 12px;
+    color: black;
+  }
+
+  .spanText span {
+    font-size: 12px;
+    margin-left: 10px;
+    color: #999999;
+  }
+
+  .cube-scroll-content{
+    display: inline-block;
+  }
+  .list-wrapper{
+    padding: 0 10px;
+    line-height: 60px;
+    white-space: nowrap;
+  }
+  .list-item{
+    display: inline-block;
+    width: 200px;
+  }
