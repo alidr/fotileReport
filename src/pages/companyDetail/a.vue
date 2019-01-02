@@ -73,16 +73,7 @@
       </div>
       <!-- 卡片 -->
      <div class="cube">
-        <swiper :options="swiperOption" ref="mySwiper" :not-next-tick="notNextTick">
-          <swiper-slide v-if="swiperRe.Status !== ''||(swiperRe.Status === '-2'&&AccessId!=5&&(data.UserID == getCookie('UserId')))">
-            <div class="followInfo followInfoBanner applyRenewal flex height" @click="linkDetail(swiperRe.RenewId)">
-              <p class="flex" style="margin-top:20px;">
-                <img src="./add.png" alt="" v-if="swiperRe.Status === '-2'">
-                <span>{{swiperReWord}}</span>
-              </p>
-              <button v-if="swiperRe.Status !== '-2'">查看详情</button>
-            </div>
-          </swiper-slide>
+        <swiper :options="swiperOption">
           <swiper-slide v-for="(slide,index) in swiperSlides" :key="index" :class="{'swiper-no-swiping':infoExtend !== -1}">
             <div class="followInfo followInfoBanner" :class="{marginLeft7:index===0,marginLeft5:index!==0,height:infoExtend == -1}">
               <div class="followDays">
@@ -91,80 +82,57 @@
                 <p v-if="slide.Status === -3">历史合同<span style="font-size:10px;">（{{slide.CoopStartDate}} ~ {{slide.CoopEndDate}}）</span></p>
                 <a href="javascript:;" @click="approvalRecord(ID)">审批记录>></a>
               </div>
-               <p class="uploadAuthorized" v-if="slide.RenewID&&(infoExtend == index)" @click="linkDetail(slide.RenewID)">
+              <p class="uploadAuthorized" v-if="btnActive || (infoExtend == index)">
                 <a class='flex'>
-                  <span class="round">
-                    <i>0</i>
-                  </span>
-                  <span class="statusDetail">续签记录</span>
+                  <span class="round" :class="{'active':btnActive}">
+                    <i :class="{'active':btnActive}">1</i></span>
+                <span class="statusDetail" :class="{'active':btnActive}">互有意向，申请授权</span>
                 </a>
-                <a href="javascript:;" class="applyBtn active">查看续签记录</a>
-                <!-- <span class="applyStatus active" >审核通过</span> -->
-              </p>
-              <span class="line" v-if="slide.RenewID&&infoExtend == index"></span>
-              <p class="uploadAuthorized" v-if="slide.Status == 1 || (infoExtend == index)">
-                <a class='flex'>
-                  <span class="round" :class="{'active':slide.Status == 1}">
-                    <i :class="{'active':slide.Status == 1}">1</i>
-                  </span>
-                  <span class="statusDetail" :class="{'active':slide.Status == 1}">互有意向，申请授权</span>
-                </a>
-                <a href="javascript:;" class="applyBtn" 
-                v-if="!slide.IsShowLook" 
-                :class="{'active':stylePlay == ''&&AccessId == 5 &&(data.UserID == getCookie('UserId'))}" 
-                @click="stylePlay == ''&&AccessId == 5 && (data.UserID == getCookie('UserId')) && applyAuthorized(1)">申请授权</a>
-                <a href="javascript:;" class="applyBtn active" v-else @click="applyAuthorized(2)">查看授权凭证</a>
+                <a href="javascript:;" class="applyBtn" :class="{'active':btnActive}" v-if="applyshou" @click="applyAuthorized(1)">申请授权</a>
+                <a href="javascript:;" class="applyBtn active" v-if="!applyshou" @click="applyAuthorized(2)">查看授权凭证</a>
                 <!-- <span class="applyStatus active" >审核通过</span> -->
               </p>
               <span class="line" v-if="infoExtend == index"></span>
-              <p class="uploadContract" v-if="(slide.Status == 2&&!slide.AuthBookImage) || (infoExtend ==index)">
+              <p class="uploadContract" v-if="btn2Active || (infoExtend ==index)">
                 <a class='flex'>
-                <span class="round" :class="{'active':slide.Status == 2&&!slide.AuthBookImage}"><i :class="{'active':slide.Status == 2&&!slide.AuthBookImage}">2</i></span>
-                <span class="statusDetail" :class="{'active':slide.Status == 2&&!slide.AuthBookImage}">授权书照片</span>
+                <span class="round" :class="{'active':btn2Active}"><i :class="{'active':btn2Active}">2</i></span>
+                <span class="statusDetail" :class="{'active':btn2Active}">授权书照片</span>
                 </a>
-                <a href="javascript:;" class="applyBtn" 
-                v-if="!slide.AuthBookImage"
-                :class="{'active':slide.Status==2&&AccessId == 3}"  @click="slide.Status==2&&AccessId == 3 && uploadContract(1)">上传授权书</a>
-                <a href="javascript:;" class="applyBtn active"
-                v-else
-                @click="getImg(slide.AuthBookImage)">查看授权书</a>
-                <span class="applyStatus active"
-                v-if="slide.AuthBookImage&&AccessId == 3"
-                @click="uploadContract(1)">重新上传</span>
+                <a href="javascript:;" class="applyBtn" :class="{'active':btn2Active}" v-if="applyshu" @click="btn2Active && uploadContract(1)">上传授权书</a>
+                <a href="javascript:;" class="applyBtn active" v-if="!applyshu" @click="getImg(slide.AuthBookImage)">查看授权书</a>
+                <span class="applyStatus active" v-if="reApplyshu" @click="uploadContract(1)">重新上传</span>
               </p>
               <span class="line" v-if="infoExtend == index"></span>
-              <p class="applyAuthorized" v-if="(slide.Status == 2&&slide.AuthBookImage) || (infoExtend == index)">
+              <p class="applyAuthorized" v-if="btn3Active || (infoExtend == index)">
                 <a class='flex'>
-                <span class="round" :class="{'active':slide.Status == 2&&slide.AuthBookImage }"><i :class="{'active':slide.Status == 2&&slide.AuthBookImage}">3</i></span>
-                <span class="statusDetail" :class="{'active':slide.Status == 2&&slide.AuthBookImage}">签约成功，上传合同</span>
+                <span class="round" :class="{'active':btn3Active}"><i :class="{'active':btn3Active}">3</i></span>
+                <span class="statusDetail" :class="{'active':btn3Active}">签约成功，上传合同</span>
                 </a>
-                <a href="javascript:;" class="applyBtn" 
-                v-if="!slide.ContractImage"
-                :class="{'active':slide.Status == 2&&slide.AuthBookImage&&AccessId == 5 &&(data.UserID == getCookie('UserId'))}"  
-                @click="slide.Status == 2&&slide.AuthBookImage&&AccessId == 5 &&(data.UserID == getCookie('UserId'))&&uploadContract(2)">上传签约合同</a>
-                <!-- <a href="javascript:;" class="applyBtn" :class="{'active':btn3Active}" v-if="applquyu">上传签约合同</a> -->
-                <a href="javascript:;" class="applyBtn active" 
-                v-else 
-                @click="showImagePreviewHT(slide.ContractImage)">查看合同</a>
+                <a href="javascript:;" class="applyBtn" :class="{'active':btn3Active}" v-if="applyhe" @click="uploadContract(2)">上传签约合同</a>
+                <a href="javascript:;" class="applyBtn" :class="{'active':btn3Active}" v-if="applquyu">上传签约合同</a>
+                <a href="javascript:;" class="applyBtn active" v-if="!applyhe&&!applquyu" @click="showImagePreviewHT(slide.ContractImage)">查看合同</a>
               </p>
               <span class="line" v-if="infoExtend == index"></span>
-              <p class="uploadContract" v-if="(slide.Status == 3&&slide.ContractImage !='') || (infoExtend == index) ||slide.Status == -3">
+              <p class="uploadContract" v-if="btn4Active || (infoExtend == index)">
                 <a class='flex'>
-                <span class="round" :class="{'active':slide.Status == 3&&slide.ContractImage !=''||slide.Status == -3}"><i :class="{'active':slide.Status == 3&&slide.ContractImage !=''||slide.Status == -3}">4</i></span>
-                <span class="statusDetail" :class="{'active':slide.Status == 3&&slide.ContractImage !=''||slide.Status == -3}">上传签约凭证</span>
+                <span class="round" :class="{'active':btn4Active}"><i :class="{'active':btn4Active}">4</i></span>
+                <span class="statusDetail" :class="{'active':btn4Active}">上传签约凭证</span>
                 </a>
-                <a href="javascript:;" class="applyBtn" 
-                v-if="!slide.ExpenseVoucherList"
-                :class="{'active':slide.Status == 3&&slide.ContractImage !=''&&AccessId == 5 &&(data.UserID == getCookie('UserId'))}" 
-                @click="slide.Status == 3&&slide.ContractImage !=''&&AccessId == 5 &&(data.UserID == getCookie('UserId'))&&uploadContract(4,slide.ID)" >上传费用凭证</a>
-                <!-- <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" v-if="slide.Status == 3&&slide.ExpenseVoucherList==''&&AccessId!==5">上传费用凭证</a> -->
-                <a href="javascript:;" class="applyBtn active" 
-                v-else 
-                @click="showImagePreviewPZ(slide.ExpenseVoucherList)">查看费用凭证</a>
-                <span class="applyStatus active" 
-                v-if="(slide.ExpenseVoucherList&&AccessId==5&&(data.UserID == getCookie('UserId')))&&slide.Status != -3" @click="uploadContract(4,slide.ID)">编辑上传</span>
+                <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" @click="uploadContract(4,slide.ID)" v-if="slide.Status == 3&&slide.ExpenseVoucherList==''&&AccessId==5">上传费用凭证</a>
+                <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" v-if="slide.Status == 3&&slide.ExpenseVoucherList==''&&AccessId!==5">上传费用凭证</a>
+                <a href="javascript:;" class="applyBtn active" v-if="slide.ExpenseVoucherList!==''" @click="showImagePreviewPZ(slide.ExpenseVoucherList)">查看费用凭证</a>
+                <span class="applyStatus active" v-if="slide.Status == 3&&slide.ExpenseVoucherList!==''&&AccessId==5" @click="uploadContract(4,slide.ID)">编辑上传</span>
               </p>
               <p class="handleExtend flex" @click="handleInfoExtend(slide,index)">{{infoExtendWord}}</p>
+            </div>
+          </swiper-slide>
+          <swiper-slide v-if="swiperRe.Status !== ''||(swiperRe.Status === '-2'&&AccessId!=5)">
+            <div class="followInfo followInfoBanner applyRenewal flex height" @click="linkDetail(swiperRe.RenewId)">
+              <p class="flex" style="margin-top:20px;">
+                <img src="./add.png" alt="" v-if="swiperRe.Status === '-2'">
+                <span>{{swiperReWord}}</span>
+              </p>
+              <button v-if="swiperRe.Status !== '-2'">查看详情</button>
             </div>
           </swiper-slide>
         </swiper>
@@ -485,16 +453,12 @@
         imgMaskArrHT: [],
         imgMaskArrPZ:[],
         timeLineImg:[],
-        notNextTick: true,
         swiperOption: {
           slidesPerView: 1.05,
           spaceBetween: 0,
+          freeMode: true,
           centeredSlides: true,
-          noSwiping : true,
-          observer:true,
-          observeParents:true,
-          // loop:true,
-          // initialSlide:2,
+          noSwiping : true
         },
         swiperSlides: [],
         infoExtend:-1,
@@ -530,18 +494,11 @@
       ]),
       // swiper,
       // swiperSlide,
-      swiper() {
-        return this.$refs.mySwiper.swiper
-      }
+      // swiper() {
+      //   return this.$refs.mySwiper.swiper
+      // }
     },
-    components: {
-      swiper,
-      swiperSlide
-    },
-    mounted() {
-      // console.log(this.swiper);
-      // this.swiper.slideTo(2)
-    },
+    
     methods: {
       linkDetail(id) {
         if (this.swiperRe.Status === '-2' ) {
@@ -1195,7 +1152,7 @@
             style: num
           }
         }
-        if (num == 1 || num == 2 || num == 4) {
+        if (this.btn3Active || this.btn2Active || this.btn4Active) {
           this.$router.push({
             path: '/uploadContract',
             query: params
