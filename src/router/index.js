@@ -43,6 +43,14 @@ let router = new Router({
       meta: {
         title: '首页'
       }
+    },{
+      name:'CompanyList',
+      path: '/companyList',
+      component: CompanyList,
+      meta: {
+        title: '家装公司列表',
+        keepAlive:true
+      }
     },
     {
       path: '/companyRetrieval',
@@ -51,14 +59,7 @@ let router = new Router({
         title: '公司检索'
       },
     },
-     {
-      path: '/companyList',
-      component: CompanyList,
-      meta: {
-        title: '家装公司列表',
-        keepAlive:true
-      }
-    }, {
+      {
       path: '/companyDetail',
       component: CompanyDetail,
       meta: {

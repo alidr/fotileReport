@@ -1,16 +1,15 @@
 <template>
   <div id="app">
     <a href="javascript:;" @click="back" id="fixBack" v-show="needBack">
-      <!-- <i class="iconfont icon-fanhui"></i> -->
       <!-- v-show="needBack&&isminprograme" -->
       <span>返回</span>
     </a>
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive">
       </router-view>
-  </keep-alive>
-  
-    <router-view v-if="!$route.meta.keepAlive"/>
+    </keep-alive>
+
+    <router-view v-if="!$route.meta.keepAlive" />
   </div>
 </template>
 
@@ -71,7 +70,7 @@
       },
       initRouter() {
         let AccessId = this.AccessId
-          //-1管理员
+        //-1管理员
         if (AccessId == -1) {
           this.$router.addRoutes(AdminRouer)
           //业务员5
@@ -90,6 +89,7 @@
         }])
       }
     },
+    
     mounted() {
       if (this.AccessId) {
         this.initRouter()
@@ -175,7 +175,7 @@
     margin: 14% auto !important;
   }
 
-  
+
 
   .cov-date-body[data-v-a9dd0b1a] {
     display: inline-block;
@@ -196,48 +196,52 @@
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
   }
 
-  
 
 
-.cube-btn {
+
+  .cube-btn {
     display: block;
-    margin: 0!important;
-    padding: 0!important;
-    text-align: center!important;
-    white-space: nowrap!important;
-    cursor: pointer!important;
-    font-size: 16px!important;
-    line-height: 1!important;
-    background: none!important;
-    outline: none!important;
-    border: none!important;
-    border-radius: 2px!important;
-    -webkit-box-sizing: border-box!important;
-    box-sizing: border-box!important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    background: none !important;
+    outline: none !important;
+    border: none !important;
+    border-radius: 2px !important;
+    -webkit-box-sizing: border-box !important;
+    box-sizing: border-box !important;
     background-color: white !important;
-    outline: none!important;
+    outline: none !important;
     cursor: pointer;
-}
+  }
 
 
-.timeChang .cube-btn::after{
-  border:none!important;
-  outline: none!important;
-}
-#button{
-  text-align: center;
-}
-.saleWarp .cube-scroll-content{
+  .timeChang .cube-btn::after {
+    border: none !important;
+    outline: none !important;
+  }
+
+  #button {
+    text-align: center;
+  }
+
+  .saleWarp .cube-scroll-content {
     z-index: 300 !important;
   }
-  
-  .cube-image-preview-item .cube-image-preview-img{
+
+  .cube-image-preview-item .cube-image-preview-img {
     margin: 0 auto;
     max-width: 80% !important;
-    border-radius:12px !important;
+    border-radius: 12px !important;
 
   }
-  .saleWarp .cube-scroll-wrapper{
+
+  .saleWarp .cube-scroll-wrapper {
     background: white;
   }
+
 </style>

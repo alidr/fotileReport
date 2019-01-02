@@ -40,7 +40,6 @@
         <router-link to="/appealHome" href="javascript:;" class="appeal" v-if="action">我要申诉</router-link>
       </div>
     </div>
-    <router-link to='/applyRenewal'>申请续签</router-link>
     <!-- 最新公告 -->
     <div class="home_newAnnounce">
       <i></i>
@@ -291,7 +290,7 @@
       ...mapMutations({
         setAccessId: 'SET_ACCESSID'
       })
-    }
+    },
   }
 
 </script>
@@ -299,6 +298,7 @@
 <style scoped>
   @import '../../common/focusList.css';
   @import '../../common/mask.css';
+
   #home {
     width: 100%;
     box-sizing: border-box;
@@ -382,7 +382,7 @@
     color: #000;
   }
 
-  .msgbg0 img{
+  .msgbg0 img {
     display: block;
     width: 64px;
     height: 64px;

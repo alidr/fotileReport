@@ -139,7 +139,7 @@ import {loginOut} from "../../utils/loginOut";
       ...mapMutations({
       setAccessId: 'SET_ACCESSID'
       })
-    }
+    },
   }
 
 </script>

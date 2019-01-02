@@ -74,11 +74,10 @@
                       </li>
                     </ul>
                   </cube-scroll>
-
                 </div>
               </div>
               <div class="stateBtn">
-                <button type="button" class="gray" @click='resetSales()'>重 置</button>
+                <button type="button" class="gray" @click='rightAllClick()'>重 置</button>
                 <button type="button" class="yellow" @click='sureSales()'>确 认</button>
               </div>
             </div>
@@ -203,7 +202,7 @@
           Name: '已签约',
           check: false,
         }, {
-          ID: 4,
+          ID: -3,
           Name: '已过期',
           check: false,
         }],
@@ -308,7 +307,6 @@
       companyFilter
     },
     created() {
-
       this.getStyleList()
       this.getPersonList()
       this.getList()
@@ -596,43 +594,37 @@
       },
        //右边全部按钮点击
        rightAllClick(){
-        if(this.salesNum!=0){
+        this.isFoodActive=[]
+        this.SaleID=''
+        if(this.salesNum!=0&&this.leftAllText=="全部业务员"){
           this.isFoodActive=[]
           this.textColor=true
           this.rightAllText=this.leftAllText
+          this.statusSelect=this.leftAllText
           this.salesNum=0
+          return false
+        }
+        if(this.salesNum==0&&this.leftAllText=="全部业务员"){
+          this.isFoodActive=[]
+          this.textColor=true
+          this.salesNum=0
+          this.statusSelect=this.rightAllText
           return false
         }
         this.Status.forEach((y)=>{
           this.textColor=true
           this.leftTextColor=true
           this.rightActive=-1
-          let JobIDLen
-          let rightID=this.rightIdArr.indexOf(y.ID)
           this.leftList.forEach((s)=>{
-            JobIDLen=this.JobID.indexOf(s.JobID)
           if(this.JobID.indexOf(s.JobID)<=-1){
             this.JobID.push(s.JobID)
           }
-         
         })
-        if(JobIDLen==-1&&this.leftAllText!=this.rightAllText){
-          this.leftList.splice(JobIDLen)
-            this.positionID.splice(JobIDLen)
-            this.rightIdArr.splice(rightID)
-        console.log(JobIDLen)
-
-        }
-        if(JobIDLen>-1&&this.leftAllText!=this.rightAllText){
-          console.log(JobIDLen,'JobIDLen')
-            this.leftActive=-1
-            this.leftTextColor=true
-            this.textColor=true
-            this.leftList.splice(JobIDLen)
-            this.positionID.splice(JobIDLen)
-            this.rightIdArr.splice(rightID)
-        }
-        
+        this.leftList.splice(this.JobID.indexOf(y.JobID))
+        this.rightIdArr.splice(this.rightIdArr.indexOf(y.ID))
+        this.isFoodActive=[]
+        this.salesNum=0
+        this.statusSelect=this.rightAllText
           if (y.JobID == 1) {
             this.leftAllText = this.quanBu+'分总'
           }
@@ -655,6 +647,7 @@
               this.allColor=false
             }
           }
+          this.statusSelect=this.leftAllText
          this.rightAllText=this.leftAllText
         })
 
@@ -667,7 +660,12 @@
         this.rightActive=-1
         let allSale=this.leftList[this.leftList.length-1]
         this.Status=allSale.list
-        this.leftAllText=this.rightAllText
+        if(this.isFoodActive.length>0){
+          this.leftAllText=this.quanBu+'业务员'
+          this.textColor=false
+        }else{
+          this.leftAllText=this.rightAllText
+        }
         allSale.list.forEach((i)=>{
           if(i.list.length==0){
             this.checkBox=true
@@ -846,6 +844,7 @@
           if (this.salesNum == 0) {
             this.rightAllText = this.quanBu+"业务员"
             this.leftAllText = this.quanBu+"业务员"
+            this.statusSelect = this.rightAllText
             this.textColor=true
           }
           this.SaleID = this.isFoodActive.join(',')
@@ -863,13 +862,16 @@
       },
       //确认业务员
       sureSales() {
-        console.log(this.salesNum)
         if (this.salesNum > 0) {
           this.SaleID = this.isFoodActive.join(',')
         }else{
           this.statusSelect=this.leftAllText
         }
-        this.DealerID = this.leftList[this.leftList.length - 1].ID
+        if(this.leftList.length==0&&this.textColor==true){
+          this.statusSelect=this.quanBu+this.allText
+        }else{
+          this.DealerID = this.leftList[this.leftList.length - 1].ID
+        }
         this.page = 1
         this.getList()
         this.hasMask = [false, false, false]
@@ -945,6 +947,9 @@
         this.$refs.scrollSale.scrollTo(0, this.scrollToY = -((number) * liHeight), )
       },
     },
+  
+    
+    
   }
 
 </script>

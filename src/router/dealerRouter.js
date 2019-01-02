@@ -1,41 +1,39 @@
-
 const Appeal = () =>
-  import ('@/pages/dealer_Appeal')
+  import('@/pages/dealer_Appeal')
 const AppealFollowUp = () =>
-  import ('@/pages/dealer_appealFollowUp')
+  import('@/pages/dealer_appealFollowUp')
 const Allgroups = () =>
-  import ('@/pages/dealer_allgroups')
+  import('@/pages/dealer_allgroups')
 const NewGroup = () =>
-  import ('@/pages/dealer_newGroup')
+  import('@/pages/dealer_newGroup')
 const SelectMember = () =>
-  import ('@/pages/dealer_selectMember')
+  import('@/pages/dealer_selectMember')
 const WaitGroup = () =>
-  import ('@/pages/dealer_waitGroup')
+  import('@/pages/dealer_waitGroup')
 const UserList = () =>
-  import ('@/pages/admin_UserList')
+  import('@/pages/admin_UserList')
 const MyGroup = () =>
-  import ('@/pages/business_myGroup')
+  import('@/pages/business_myGroup')
 const SalesmanList = () =>
-  import ('@/pages/SalesmanList')
+  import('@/pages/SalesmanList')
 const EditUser = () =>
-  import ('@/pages/admin_editUser')
+  import('@/pages/admin_editUser')
 const ApplyAuthorized = () =>
-  import ('@/pages/business_applyAuthorized')
-export default [
-  {
+  import('@/pages/business_applyAuthorized')
+export default [{
     path: '/appeal',
     component: Appeal,
     meta: {
       title: '申诉审批'
     },
   },
-    {
-      path: '/applyAuthorized',
-      component: ApplyAuthorized,
-      meta: {
-        title: '申请授权'
-      },
+  {
+    path: '/applyAuthorized',
+    component: ApplyAuthorized,
+    meta: {
+      title: '申请授权'
     },
+  },
   {
     path: '/appealFollowUp',
     component: AppealFollowUp,
@@ -71,31 +69,30 @@ export default [
       title: '待审批小组'
     },
   },
-   {
-     path: '/UserList',
-     component: UserList,
-     meta: {
-       title: '用户列表',
-       keepAlive:true
-     },
-   }, {
-     path: '/myGroup',
-     component: MyGroup,
-     meta: {
-       title: '我的小组'
-     },
-   } ,{
-     path: '/SalesmanList',
-     component: SalesmanList,
-     meta: {
-       title: '业务员列表'
-     },
-   },
-   , {
-     path: '/editUser',
-     component: EditUser,
-     meta: {
-       title: '编辑用户'
-     },
-   },
+  {
+    path: '/UserList',
+    component: UserList,
+    meta: {
+      title: '用户列表',
+      keepAlive: true
+    },
+  }, {
+    path: '/myGroup',
+    component: MyGroup,
+    meta: {
+      title: '我的小组'
+    },
+  }, {
+    path: '/SalesmanList',
+    component: SalesmanList,
+    meta: {
+      title: '业务员列表'
+    },
+  }, , {
+    path: '/editUser',
+    component: EditUser,
+    meta: {
+      title: '编辑用户'
+    },
+  },
 ]
