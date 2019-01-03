@@ -17,6 +17,7 @@
         <button type="button">已过期
           <span>{{count.Complete}}</span>
         </button>
+        
       </div>
       <div class="search">
         <input type="text" placeholder="请搜索公司名称关键词" v-model="keyword">
@@ -55,7 +56,7 @@
                 <div class="leftUl  widthUL grayF9">
                   <ul class="leftList" v-show='showDistrib'>
                     <li v-if='allColor' :class='{active:textColor}'>全部{{allText}}</li>
-                    <li v-for='(item,index) in leftList' @click='leftClick(item,index)' :class='{active:index==leftActive}'>{{item.Name}}</li>
+                    <li v-for='(item,index) in leftList' :key='index' @click='leftClick(item,index)' :class='{active:index==leftActive}'>{{item.Name}}</li>
                     <li v-if='!allColor' :class='{active:leftTextColor}' v-html='rightAllText' @click='allClick&&leftAllClick()' ></li>
                   </ul>
                 </div>
@@ -108,7 +109,7 @@
         </div>
       </div>
       <div class="letterSort" v-if="hasMask[0]&&sortArr.length>0">
-        <p v-for='(item,index) in sortArr' @click='namePosition(item,index)' :class='{active:index==zmFlag}'>{{item}}</p>
+        <p v-for='(item,index) in sortArr' :key='index' @click='namePosition(item,index)' :class='{active:index==zmFlag}'>{{item}}</p>
       </div>
     </div>
     <div class="listWrap">
@@ -186,7 +187,6 @@
         isStatus: [],
         salesArr: [],
         isFoodActive: [],
-
         salesMask: false, //业务员列表
         // 全部分类
         allStateText: [{
@@ -353,23 +353,18 @@
               this.idList.splice(i)
             }
           }
-
           for (let i = 0; i < this.checkBoxs.length; i++) {
             if (this.checkBoxs[i]) {
               this.checkAllBox = true
             }
           }
-
         } else {
           this.checkBoxs[index] = true
           this.idList.push(id)
           this.checkAllBox = true
         }
-
         this.idList = this.idList.slice()
         this.checkBoxs = this.checkBoxs.slice()
-
-
       },
       checkAll(List) {
         if (this.checkAllBox) {
@@ -380,7 +375,6 @@
           }
           this.checkBoxs = this.checkBoxs.slice()
         } else {
-
           this.checkAllBox = true
           for (let i = 0; i < List.length; i++) {
             this.checkBoxs[i] = true
@@ -389,7 +383,6 @@
           this.checkBoxs = this.checkBoxs.slice()
           this.idList = this.idList.slice()
         }
-
       },
       jump(num) {
         this.$router.push({
@@ -439,7 +432,6 @@
           .then(res => {
             if (res.data.Status === 1) {
               this.salesmanLists = res.data.Data.list
-
             } else if (res.data.Status < 0) {
               this.getToast("登录失效，请重新登录", 'warn')
               setTimeout(() => {
@@ -488,7 +480,6 @@
               } else {
                 this.emptyFlag = false
               }
-
             } else if (res.data.Status < 0) {
               this.delCookie("UserId")
               this.delCookie("token")
@@ -511,7 +502,6 @@
           .then(res => {
             if (res.data.Status === 1) {
               this.count = res.data.Data
-
             } else if (res.data.Status < 0) {
               this.delCookie("UserId")
               this.delCookie("token")
@@ -544,7 +534,6 @@
             this.allText = '分总'
           }
           if (this.Status.length > 0) {
-
           }
           if (this.Status.length > 0) {} else {
             if (index == 0) {
@@ -581,21 +570,22 @@
                         })
                       })
                     })
-
                   }
-
                 })
             }
           }
           this.hasMask[index] = true
         }
         this.Mask = this.hasMask[index] ? true : false
-
       },
        //右边全部按钮点击
        rightAllClick(){
+         if(this.leftAllText==this.rightAllText){
+          return false
+        }
         this.isFoodActive=[]
         this.SaleID=''
+        
         if(this.salesNum!=0&&this.leftAllText=="全部业务员"){
           this.isFoodActive=[]
           this.textColor=true
@@ -606,9 +596,10 @@
         }
         if(this.salesNum==0&&this.leftAllText=="全部业务员"){
           this.isFoodActive=[]
+          
           this.textColor=true
           this.salesNum=0
-          this.statusSelect=this.rightAllText
+          this.statusSelect=this.leftAllText
           return false
         }
         this.Status.forEach((y)=>{
@@ -619,6 +610,7 @@
           if(this.JobID.indexOf(s.JobID)<=-1){
             this.JobID.push(s.JobID)
           }
+         
         })
         this.leftList.splice(this.JobID.indexOf(y.JobID))
         this.rightIdArr.splice(this.rightIdArr.indexOf(y.ID))
@@ -647,10 +639,8 @@
               this.allColor=false
             }
           }
-          this.statusSelect=this.leftAllText
          this.rightAllText=this.leftAllText
         })
-
       },
       //左边全部按钮点击
       leftAllClick() {
@@ -671,7 +661,6 @@
             this.checkBox=true
           }
         })
-
       },
       //右边列表的点击
       rightClick(item, index) {
@@ -715,13 +704,10 @@
                 this.positionID.push(item.positionID)
               }
             }
-
             if (item.positionID == g.positionID) {
-
               this.rightIdArr = []
               this.leftList = []
               if (this.rightIdArr.indexOf(item.ID) < 0) {
-
                 this.rightIdArr.push(item.ID)
                 this.leftList.push(item)
                 this.leftActive=-1
@@ -729,9 +715,7 @@
                 this.textColor=true
               }
             }
-
           })
-
         }
         if (this.leftList.length > 1) {
           this.leftList.forEach((g) => {
@@ -757,7 +741,6 @@
           })
         }
         this.rightActive = -1
-
         item.list.forEach((k, l) => {
           if (k.list.length <= 0) {
             this.clickFlag = false
@@ -796,7 +779,6 @@
         if (item.list.length >= 0) {
           this.checkBox = false
           this.clickFlag = true
-
         } else {
           this.checkBox = true
           this.clickFlag = false
@@ -815,7 +797,6 @@
             }
           })
         })
-
         if (idArr.indexOf(item.ID) < 0) {
           this.Status = this.startArr
           this.Status.forEach((t, i) => {
@@ -836,7 +817,6 @@
           this.salesNum = this.isFoodActive.length
           this.SaleID = this.isFoodActive.join(',')
           this.rightAllText="业务员"+"("+this.salesNum+")"
-
         } else {
           this.isFoodActive.splice(indexId, 1);
           this.salesNum = this.isFoodActive.length
@@ -854,7 +834,6 @@
           this.leftTextColor=true
         }
       },
-
       // 业务员列表重置
       resetSales() {
         this.isFoodActive = []
@@ -947,46 +926,34 @@
         this.$refs.scrollSale.scrollTo(0, this.scrollToY = -((number) * liHeight), )
       },
     },
-  
-    
-    
   }
-
 </script>
 <style scoped>
   @import '../../common/filterH.css';
   @import '../../common/focusList.css';
-
   .allMask .saleWarp {
     width: 100%;
     height: 60vh;
     background-color: #F5F5F5;
     overflow-y: scroll !important;
     -webkit-overflow-scrolling: touch;
-
   }
-
   .saleWarp .cube-scroll-content {
     z-index: 800 !important;
   }
-
   .listWrap .scroll-list-wrap {
     height: calc(100vh - 210px);
   }
-
   .contentListTop {
     margin-left: 0px;
     padding-bottom: 10px
   }
-
   .contentListBottom {
     margin-left: 0px;
   }
-
   .firstLine span:nth-child(1) {
     margin-left: 30px;
   }
-
   .twoLine .round {
     display: flex;
     justify-content: center;
@@ -997,11 +964,9 @@
     border: 1px solid #ccc;
     margin-right: 15px;
   }
-
   .twoLine .round.active {
     border: 1px solid #E2C78F;
   }
-
   .twoLine .round b {
     display: flex;
     width: 14px;
@@ -1009,16 +974,13 @@
     border-radius: 8px;
     background-color: #ccc;
   }
-
   .twoLine .round b.active {
     background-color: #E2C78F;
   }
-
   .HomeDecoration {
     width: 100%;
     overflow: hidden;
   }
-
   .top {
     width: 100%;
     overflow: hidden;
@@ -1027,7 +989,6 @@
     background: white;
     margin-bottom: 12px;
   }
-
   .top .topBtn {
     width: 92%;
     display: flex;
@@ -1037,7 +998,6 @@
     margin: 0 auto;
     margin-bottom: 12px;
   }
-
   .top .topBtn button {
     width: 24%;
     height: 38px;
@@ -1046,36 +1006,28 @@
     line-height: 38px;
     text-align: center;
   }
-
   .top .topBtn button:nth-child(1) {
     background: #F6EAD4;
     color: #BB9F61;
   }
-
   .top .topBtn button:nth-child(2) {
     background: #FFDED6;
     color: #F26F53;
-
   }
-
   .top .topBtn button:nth-child(3) {
     background: #F3CF9D;
     color: #FFFFFF;
   }
-
   .top .topBtn button:nth-child(4) {
     background: #CDDFEE;
     color: #FFFFFF;
   }
-
   .top .search {
     width: 92%;
     height: 44px;
     margin: 0 auto;
     position: relative;
-
   }
-
   .top .search input {
     width: 80%;
     height: 96%;
@@ -1084,9 +1036,7 @@
     padding-left: 14px;
     border: 1px solid rgba(208, 208, 208, 1);
     border-radius: 4px;
-
   }
-
   .top .search span {
     display: block;
     width: 18%;
@@ -1102,28 +1052,24 @@
     line-height: 44px;
     text-align: center;
   }
-
   .top .classList {
     width: 92%;
     overflow: hidden;
     margin: 0 auto;
     padding-top: 22px;
   }
-
   .top .classList ul {
     width: 100%;
     overflow: hidden;
     display: flex;
     justify-content: space-between
   }
-
   .top .classList ul li {
     width: 30%;
     height: 24px;
     overflow: hidden;
     position: relative;
   }
-
   .top .classList ul li p {
     display: block;
     width: 74%;
@@ -1134,9 +1080,7 @@
     font-size: 12px;
     line-height: 22px;
     padding-left: 6px;
-
   }
-
   .top .classList ul li span {
     width: 20%;
     height: 24px;
@@ -1146,7 +1090,6 @@
     background: rgba(182, 160, 121, 1);
     border-radius: 0px 4px 4px 0px;
   }
-
   .top .classList ul li span::before {
     content: '';
     position: absolute;
@@ -1161,18 +1104,15 @@
     border-right: 5px solid transparent;
     border-top: 5px solid white;
   }
-
   .companyList {
     width: 88%;
     overflow: hidden;
     margin: 0 auto;
   }
-
   .companyList ul {
     width: 100%;
     overflow: hidden;
   }
-
   .companyList ul li {
     width: 100%;
     overflow: hidden;
@@ -1181,12 +1121,10 @@
     border-radius: 8px;
     margin-bottom: 15px;
   }
-
   .comList {
     width: 92%;
     margin: 0 auto;
   }
-
   /* 底部 */
   .bottom {
     width: 100%;
@@ -1203,14 +1141,12 @@
     left: 0;
     z-index: 99;
   }
-
   .bottom .content {
     flex: 1;
     width: 0;
     font-size: 16px;
     color: #fff;
   }
-
   .bottom .btn {
     width: 110px;
     height: 40px;
@@ -1221,7 +1157,6 @@
     align-items: center;
     color: #fff;
   }
-
   .bottom .round {
     display: flex;
     justify-content: center;
@@ -1232,11 +1167,9 @@
     border: 1px solid #ccc;
     margin-right: 15px;
   }
-
   .bottom .round.active {
     border: 1px solid #E2C78F;
   }
-
   .bottom .round b {
     display: flex;
     width: 14px;
@@ -1244,11 +1177,9 @@
     border-radius: 8px;
     background-color: #ccc;
   }
-
   .bottom .round b.active {
     background-color: #E2C78F;
   }
-
   .contentListTop i {
     position: absolute;
     top: 0;
@@ -1257,5 +1188,4 @@
     height: 28px;
     border-radius: 6px 3px;
   }
-
 </style>

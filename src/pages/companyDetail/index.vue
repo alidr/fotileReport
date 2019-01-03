@@ -71,19 +71,24 @@
         </div>
 
       </div>
-<<<<<<< HEAD
-=======
       <!-- 卡片 -->
      <div class="cube">
         <swiper :options="swiperOption" ref="mySwiper" :not-next-tick="notNextTick">
-          <swiper-slide v-if="swiperRe.Status !== ''||(swiperRe.Status === '-2'&&AccessId!=5&&(data.UserID == getCookie('UserId')))">
+          <swiper-slide v-if="swiperRe.Status !== ''&&swiperRe.Status !== '-2'">
             <div class="followInfo followInfoBanner applyRenewal flex height" @click="linkDetail(swiperRe.RenewId)">
               <p class="flex" style="margin-top:20px;">
-                <img src="./add.png" alt="" v-if="swiperRe.Status === '-2'">
                 <span>{{swiperReWord}}</span>
               </p>
-              <button v-if="swiperRe.Status !== '-2'">查看详情</button>
+              <button>查看详情</button>
             </div>
+          </swiper-slide>
+           <swiper-slide v-if="swiperRe.Status === '-2'&&AccessId==5&&(data.UserID == getCookie('UserId'))">
+            <div class="followInfo followInfoBanner applyRenewal flex height" @click="linkDetail(swiperRe.RenewId)">
+              <p class="flex" style="margin-top:20px;">
+                <img src="./add.png" alt="">
+                <span>{{swiperReWord}}</span>
+              </p>
+            </div> 
           </swiper-slide>
           <swiper-slide v-for="(slide,index) in swiperSlides" :key="index" :class="{'swiper-no-swiping':infoExtend !== -1}">
             <div class="followInfo followInfoBanner" :class="{marginLeft7:index===0,marginLeft5:index!==0,height:infoExtend == -1}">
@@ -91,7 +96,7 @@
                 <p v-if="slide.Status === 1 || slide.Status === 2">当前已跟进<span>{{slide.NowFollowDay}}</span>/{{slide.FollowDay}}天</p>
                 <p v-if="slide.Status === 3">合同剩余时间<span>{{slide.EndTime}}</span>天</p>
                 <p v-if="slide.Status === -3">历史合同<span style="font-size:10px;">（{{slide.CoopStartDate}} ~ {{slide.CoopEndDate}}）</span></p>
-                <a href="javascript:;" @click="approvalRecord(ID)">审批记录>></a>
+                <a href="javascript:;" @click="approvalRecord(ID,slide.ID)">审批记录>></a>
               </div>
                <p class="uploadAuthorized" v-if="slide.RenewID&&(infoExtend == index)" @click="linkDetail(slide.RenewID)">
                 <a class='flex'>
@@ -172,46 +177,7 @@
         </swiper>
      </div>
       <!-- <router-link to='/test'>测试</router-link> -->
->>>>>>> 9b735c369fceb057b409ce907d002b433517ab43
-      <!-- 跟进信息 -->
-      <div class="followInfo">
-        <div class="followDays">
-          <p>当前已跟进<span>{{data.NowFollowDay}}</span>/{{data.FollowDay}}天</p>
-          <a href="javascript:;" @click="approvalRecord(ID)">审批记录>></a>
-        </div>
-        <p class="uploadAuthorized">
-          <span class="round" :class="{'active':btnActive}"><i :class="{'active':btnActive}">1</i></span>
-          <span class="statusDetail" :class="{'active':btnActive}">洽谈成功，申请授权</span>
-          <a href="javascript:;" class="applyBtn" :class="{'active':btnActive}" v-if="applyshou" @click="applyAuthorized(1)">申请授权</a>
-          <a href="javascript:;" class="applyBtn active" v-if="!applyshou" @click="applyAuthorized(2)">查看授权凭证</a>
-          <!-- <span class="applyStatus active" >审核通过</span> -->
-        </p>
-        <span class="line"></span>
-        <p class="uploadContract">
-          <span class="round" :class="{'active':btn2Active}"><i :class="{'active':btn2Active}">2</i></span>
-          <span class="statusDetail" :class="{'active':btn2Active}">授权书照片</span>
-          <a href="javascript:;" class="applyBtn" :class="{'active':btn2Active}" v-if="applyshu" @click="btn2Active && uploadContract(1)">上传授权书</a>
-          <a href="javascript:;" class="applyBtn active" v-if="!applyshu" @click="getImg(data.AuthBookImage)">查看授权书</a>
-          <span class="applyStatus active" v-if="reApplyshu" @click="uploadContract(1)">重新上传</span>
-        </p>
-        <span class="line"></span>
-        <p class="applyAuthorized">
-          <span class="round" :class="{'active':btn3Active}"><i :class="{'active':btn3Active}">3</i></span>
-          <span class="statusDetail" :class="{'active':btn3Active}">签约成功，上传合同</span>
-          <a href="javascript:;" class="applyBtn" :class="{'active':btn3Active}" v-if="applyhe" @click="uploadContract(2)">上传签约合同</a>
-          <a href="javascript:;" class="applyBtn" :class="{'active':btn3Active}" v-if="applquyu">上传签约合同</a>
-          <a href="javascript:;" class="applyBtn active" v-if="!applyhe&&!applquyu" @click="showImagePreviewHT(data.ContractImage)">查看合同</a>
-        </p>
-        <span class="line"></span>
-        <p class="uploadContract">
-          <span class="round" :class="{'active':btn4Active}"><i :class="{'active':btn4Active}">4</i></span>
-          <span class="statusDetail" :class="{'active':btn4Active}">上传签约凭证</span>
-          <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" @click="uploadContract(4)" v-if='applyqy'>上传费用凭证</a>
-          <a href="javascript:;" class="applyBtn" :class="{'active':btn4Active}" v-if='freeBtn'>上传费用凭证</a>
-          <a href="javascript:;" class="applyBtn active" v-if="!applyqy&&!freeBtn" @click="showImagePreviewPZ(data.ExpenseVoucherList)">查看费用凭证</a>
-          <span class="applyStatus active" v-if="reApplyqy" @click="uploadContract(4)">编辑上传</span>
-        </p>
-      </div>
+
       <!-- 跟单时间线 -->
       <div class="followTime">
         <div class="followTimeTop">
@@ -478,9 +444,6 @@
         imgMaskArrHT: [],
         imgMaskArrPZ:[],
         timeLineImg:[],
-<<<<<<< HEAD
-
-=======
         notNextTick: true,
         swiperOption: {
           slidesPerView: 1.05,
@@ -496,7 +459,6 @@
         infoExtend:-1,
         infoExtendWord:'展开',
         swiperRe:{}
->>>>>>> 44b1666e89943e0f16b0b79b336ab21ad3ee0c7d
       }
 
     },
@@ -508,10 +470,20 @@
       this.showModel()
       this.getTimeLine(this.ID)
       this.getComplete(this.ID)
-
-
+      this. getCompanyContractList(this.ID)
     },
     computed: {
+      swiperReWord:function() {
+        if (this.swiperRe.Status==0) {
+          return '续签申请中'
+        }else if (this.swiperRe.Status==-1) {
+          return '续签申请失败'
+        }else if (this.swiperRe.Status==1) {
+          return  '续签申请成功'
+        }else if (this.swiperRe.Status==-2) {
+          return  '申请续签'
+        }
+      },
       ...mapGetters([
         'AccessId'
       ]),
@@ -530,8 +502,6 @@
       // this.swiper.slideTo(2)
     },
     methods: {
-<<<<<<< HEAD
-=======
       linkDetail(id) {
         if (this.swiperRe.Status === '-2' ) {
           const _info = {
@@ -587,7 +557,6 @@
           this.slide = slide
         }
       },
->>>>>>> 9b735c369fceb057b409ce907d002b433517ab43
       deleteSelect() {
         if (this.type == 1) {
           this.deleteTimeLine()
@@ -1147,10 +1116,13 @@
           }
         })
       },
-      approvalRecord(ID) {
+      approvalRecord(ID,reId) {
         localStorage.setItem("companyId", ID)
         this.$router.push({
-          path: '/approvalRecord'
+          path: '/approvalRecord',
+          query:{
+            reId
+          }
         })
 
       },
@@ -1185,12 +1157,10 @@
             style: num
           }
         }
-        if (num == 1 || num == 2 || num == 4) {
-          this.$router.push({
-            path: '/uploadContract',
-            query: params
-          })
-        }
+        this.$router.push({
+          path: '/uploadContract',
+          query: params
+        })
       },
 
       //放弃跟进
@@ -1301,590 +1271,6 @@
   @import '../../common/mask.css';
   @import '../../common/input.css';
   @import 'swiper/dist/css/swiper.css';
-
-  #mask .img {
-    width: 80%;
-  }
-
-  #mask .img img {
-    width: 100%;
-  }
-
-  .btn {
-    margin-top: 15px;
-  }
-
-  .title {
-    margin-bottom: 15px;
-  }
-
-  .otherInfo {
-    margin-top: 15px;
-    border-top: 1px solid #f0f0f0;
-  }
-
-  .otherInfo p {
-    margin-bottom: 10px;
-    height: 25px;
-  }
-
-  .basicInfoBottom .otherInfo p :nth-child(2) {
-    width: auto;
-  }
-
-  #companyDetail {
-    width: 100%;
-  }
-
-  /* 基础信息 */
-  .contetn {
-    padding: 15px;
-    box-sizing: border-box;
-
-  }
-
-  .basicInfo,
-  .followInfo,
-  .followTime,
-  .competition,
-  .shopInfo {
-    background-color: #fff;
-    width: 100%;
-    border-radius: 4px;
-    padding: 0 15px 10px;
-    box-sizing: border-box;
-    margin-bottom: 15px;
-  }
-
-  .basicInfoTop {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px 0;
-    border-bottom: 1px solid #f0f0f0;
-    position: relative;
-  }
-
-  .basic {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    width: 0;
-    flex: 1;
-
-  }
-
-  .status {
-    width: 80%;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-  }
-
-  .status span:first-child {
-    padding: 0 10px;
-    background-color: #F6EAD4;
-    color: #BB9F61;
-    border-radius: 4px;
-    height: 20px;
-    display: inline-block;
-    line-height: 20px;
-  }
-
-  .status span:nth-child(2) {
-    font-size: 16px;
-    font-weight: 600;
-    margin-left: 5px;
-    width: 70%;
-    word-break: break-all;
-    line-height: 20px;
-  }
-
-  .person {
-    color: black;
-    font-size: 12px;
-    margin-right: 16px;
-  }
-
-  .person span {
-    color: #999999;
-    margin-left: 10px;
-  }
-
-  .topIcon {
-    /* width: 80px; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 12px;
-    right: -10px;
-  }
-
-  .topIcon span {
-    flex: 1;
-  }
-
-  .topIcon span img {
-    width: 33px;
-  }
-
-  .basicInfoBottom {
-    margin-top: 15px;
-    font-size: 12px;
-    color: #666666;
-    min-height: 120px;
-  }
-
-  .basicInfoBottom p {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-  }
-
-  .basicInfoBottom p i img {
-    width: 16px;
-  }
-
-  .basicInfoBottom p i {
-    margin-right: 5px;
-    display: flex;
-    align-items: center;
-    height: 100%;
-  }
-
-  .job {
-    margin-left: 35px;
-  }
-
-  .job img {
-    width: 12px !important;
-  }
-
-  .basicInfoBottom p span {
-    display: inline-block;
-    margin-right: 10px;
-
-  }
-
-  .basicInfoBottom p :nth-child(2) {
-    display: flex;
-    width: 60px;
-  }
-
-  .ImageBtn {
-    background-color: #ccc;
-    padding: 5px;
-    border-radius: 4px;
-    color: #fff
-  }
-
-  .ImageBtn.active {
-    background-color: rgba(226, 199, 143, 1);
-  }
-
-  .color {
-    color: rgb(83, 78, 78);
-  }
-
-  .color.active {
-    color: #FFFFFF;
-    padding: 0 20px;
-    line-height: 24px;
-    background: rgba(226, 199, 143, 1);
-    border-radius: 4px;
-  }
-
-  #expend {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-  }
-
-  #expend span {
-    width: 0;
-    flex-grow: 1;
-    text-align: right;
-    color: #4d4d4d;
-    font-size: 12px;
-  }
-
-  /* 跟进信息 */
-  .followInfo {
-    padding-bottom: 15px;
-  }
-
-  .followDays {
-    display: flex;
-    align-items: center;
-    padding: 15px 0;
-  }
-
-  .followDays p {
-    width: 0;
-    flex-grow: 1;
-    font-size: 16px;
-    font-weight: 500;
-    color: #4d4d4d;
-    display: flex;
-    align-items: center;
-  }
-
-  .followDays p span {
-    font-size: 20px;
-    color: #BB9F61;
-  }
-
-  .followDays a {
-    color: #BB9F61;
-  }
-
-  .applyAuthorized,
-  .uploadAuthorized,
-  .uploadContract {
-    display: flex;
-    align-items: center;
-    font-size: 12px;
-    color: #ccc;
-  }
-
-  .round {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 22px;
-    height: 22px;
-    border-radius: 11px;
-    border: 1px solid #CCC;
-    margin-right: 10px;
-  }
-
-  .round i {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 18px;
-    height: 18px;
-    border-radius: 9px;
-    background-color: #ccc;
-    color: #fff;
-  }
-
-  .round.active {
-    border: 1px solid #BB9F61;
-  }
-
-  .round i.active {
-    background-color: #BB9F61;
-  }
-
-  .applyBtn {
-    width: 85px;
-    height: 30px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    color: #ccc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 5px;
-  }
-
-  .applyStatus {
-    width: 0;
-    flex-grow: 1;
-    text-align: right;
-  }
-
-  .line {
-    display: flex;
-    height: 32px;
-    width: 10px;
-    border-left: 1px dotted #ccc;
-    margin-left: 11px;
-  }
-
-  .applyBtn.active {
-    border: 1px solid #BB9F61;
-    color: #BB9F61;
-  }
-
-  .statusDetail {
-    width: 108px;
-  }
-
-  .statusDetail.active,
-  .applyStatus.active {
-    color: #666;
-  }
-
-  .applyStatus.active {
-    color: #9c9c9c;
-  }
-
-  /* 跟单时间线 */
-
-  .followTimeTop,
-  .competitionNum {
-    display: flex;
-    align-items: center;
-    padding-top: 10px;
-    margin-bottom: 10px;
-  }
-
-  .followTimeTop p {
-    width: 0;
-    flex-grow: 1;
-    color: #4d4d4d;
-  }
-
-  .followTimeTop p span {
-    font-size: 16px;
-  }
-
-  .followTimeTop p span:nth-child(2) {
-    float: right;
-  }
-
-  .followTimeDetail {
-    border: 1px solid #BB9F61;
-    margin-top: 10px;
-    padding: 10px;
-    box-sizing: border-box;
-  }
-
-  .followTimeDetail .Date {
-    margin-bottom: 10px;
-    color: #666;
-    display: flex;
-    align-items: center;
-  }
-
-  .followTimeDetail .Date span:nth-child(2) {
-    width: 0;
-    flex-grow: 1;
-    margin-left: 5px;
-    font-weight: 600;
-  }
-
-  .followTimeDetail .Date i {
-    display: flex;
-    justify-content: center;
-  }
-
-  .followTimeDetail .Date i img {
-    width: 40px;
-    height: 27px;
-  }
-
-  .followTimeDetail .detail {
-    /* height: 20px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis; */
-    color: #999;
-    margin-bottom: 10px;
-  }
-
-  /* .timeLineImg{
-  display: flex;
-  justify-content: center;
-  align-items: center
-} */
-  .timeLineImg img {
-    width: 80px;
-    height: 80px;
-    margin-right: 10px;
-  }
-
-  /* 竞品分析 */
-
-  .followDays .month {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 12px;
-    background-color: #F6EAD4;
-    border-radius: 4px;
-    padding: 0 10px;
-    height: 20px;
-    margin-left: 10px;
-  }
-
-  .competitionInfo {
-    display: flex;
-    padding: 10px;
-    border-top: 4px solid #f0f0f0;
-    border-bottom: 1px solid #f0f0f0;
-  }
-
-  .competitionInfo p {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    flex-grow: 1;
-    border-right: 1px solid #f0f0f0;
-  }
-
-  .competitionInfo p:last-child {
-    border: none;
-  }
-
-  .competitionInfo p span:nth-child(1) {
-    margin-bottom: 10px;
-    color: #808080;
-  }
-
-  .competitionInfo p span:nth-child(2) {
-    color: #000;
-  }
-
-  .competitionNum p {
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1;
-    color: #808080;
-  }
-
-  .competitionNum p span {
-    color: #000;
-  }
-
-  .competitionNum p:nth-child(1),
-  .competitionNum p:nth-child(2) {
-    border-right: 1px solid #f0f0f0;
-  }
-
-  #button {
-    background-image: none;
-    border: 1px solid #BB9F61;
-    color: #BB9F61;
-  }
-
-  /* 直营店信息 */
-  .shopInfo .followDays {
-    border-bottom: 1px solid #f0f0f0;
-  }
-
-  .shopInfo .followDays span,
-  .followTimeTop span:nth-child(2) {
-    font-size: 12px;
-    padding: 5px 10px;
-    border-radius: 4px;
-  }
-
-  .upload {
-    background-color: #ccc;
-
-    color: #fff;
-    margin-right: 10px;
-  }
-
-  .upload.noImg {
-    background-color: #E2C78F;
-  }
-
-  .reUpload {
-    color: #E2C78F;
-    border: 1px solid #E2C78F;
-  }
-
-  .ShopMsg {
-    height: 140px;
-    font-size: 28px;
-    color: #ccc;
-    font-weight: 700;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-
-  /* <div class="ShopDetailInfo">
-        <p>直营门店1<span>门店地门店地址门店地址址门店地址</span><i><img src="./delete.png" alt=""></i></p>
-        <p>直营门店2<span>门店地门店地址门店地址址门店地址</span> <i><img src="./delete.png" alt=""></i></p>
-      </div> */
-  .ShopDetailInfo p {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 1px solid #f0f0f0;
-    height: 45px;
-  }
-
-  .ShopDetailInfo p span {
-    width: 0;
-    flex-grow: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin-left: 10px;
-    color: #a7a7a7;
-  }
-
-  .ShopDetailInfo p i {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .ShopDetailInfo p img {
-    width: 40px;
-  }
-
-  .addShop {
-    justify-content: center;
-    border: none !important;
-  }
-
-  .infoNull {
-    color: #ccc;
-    font-size: 28px;
-    font-weight: 600;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
-    border-top: 4px solid #f0f0f0;
-  }
-
-  .swiperMask {
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.6);
-    width: 100%;
-    height: 100%;
-  }
-
-  .swiperMask img {
-    display: block;
-    width: 74%;
-    margin: 0 auto;
-  }
-
-  .closeSwiper {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    width: 40px;
-    height: 4px;
-    z-index: 99;
-  }
-
-  .basicText {
-    display: flex;
-    font-size: 12px;
-    color: black;
-  }
-
-  .spanText span {
-    font-size: 12px;
-    margin-left: 10px;
-    color: #999999;
-  }
-
+  @import './index.css';
 </style>
+

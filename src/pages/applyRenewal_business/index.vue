@@ -381,7 +381,7 @@
               if (res.data.Status === 1) {
                 this.getToast("提交成功", 'correct')
                 setTimeout(() => {
-                  this.$router.push({
+                  this.$router.replace({
                     path: '/companyDetail',
                     query: {
                       id: this.info._companyId

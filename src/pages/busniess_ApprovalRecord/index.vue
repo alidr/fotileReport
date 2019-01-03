@@ -49,10 +49,12 @@ export default {
       OneList:[],
       TwoList:[],
       queryId:'',
-      infoNull:false
+      infoNull:false,
+      reId:''
     }
   },
   created(){
+    this.reId = this.$route.query.reId
     this.queryId=localStorage.getItem("companyId")
     console.log(this.queryId);
     
@@ -71,7 +73,8 @@ export default {
           UserId:getCookie('UserId'),
           token:getCookie('token'),
           CompanyID:this.queryId,
-          TypeID:num
+          TypeID:num,
+          ContractID:this.reId
         })
       })
       .then(res=>{
